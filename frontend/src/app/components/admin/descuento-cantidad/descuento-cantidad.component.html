@@ -1,0 +1,150 @@
+
+<!--modales para mostrar-->
+<div *ngIf="showModalDecuentoCantidad">
+    <div class="modal fade" id="ModalDecuentoCantidad" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">DESCUENTO POR CANTIDAD</h4>
+                </div>
+                <div class="card-box">
+                    <div class="row">
+
+                        <div class="col-lg-12">
+                            <label ><strong>Producto: </strong> {{nombre_producto}} </label>
+                            <br>
+                            <label ><strong>Precio unidad: Bs.</strong> {{precio_unidad}} </label>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <label ><strong>DESCUENTOS DEL PRODUCTO</strong></label>
+
+                            <div class="table-responsive">
+                                <table class="table row-border hover">
+                                    <thead>
+                                        <tr>
+                                            <th>CANT.</th>
+                                            <th>% DESC.</th>
+                                            <th>DESC</th>
+                                            <th>PRECIO</th>
+                                            <th>FECHA LIMIT.</th>
+                                            <th class="text-right">ELIMINAR</th>
+                                        </tr>
+                                    </thead>
+        
+                                    <tbody>
+                                        <tr *ngFor="let descuento of listaDescuentoProductos">
+                                            <td>{{descuento.cantidad_inicio}} - {{descuento.cantidad_limite}}</td>
+                                            <td>{{descuento.porcentaje_descuento}}%</td>
+                                            <td>Bs. -{{descuento.descuento}}</td>
+                                            <td>Bs. {{descuento.precio_descuento}}</td>
+                                            <td>{{descuento.fecha_limite}}</td>
+                                            <td class="text-right">
+                                                <a href="javascript:void(0);" class="btn btn-danger btn-rounded float-right" (click)="actualizarEstadoDescuentoCantidadById(0, descuento.id)"><i class="fa fa-remove"></i></a> 
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-3">
+                            <label ><strong>AGREGAR DESCUENTO</strong></label>
+
+                            <div class="form-group">
+                                <label>Cantidad minima:<span class="text-danger">*</span></label>
+                                <input type="number" [(ngModel)]="cantidad_minima_agregar" #ctrl="ngModel" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Cantidad maxima:<span class="text-danger">*</span></label>
+                                <input type="number" [(ngModel)]="cantidad_maxima_agregar" #ctrl="ngModel" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Fecha limite:<span class="text-danger">*</span></label>
+                                <input type="date" [(ngModel)]="fecha_limite_agregar" #ctrl="ngModel" class="form-control date">
+                            </div>
+                                                        
+                            <div class="form-group">
+                                <label>Precio descuento:<span class="text-danger">*</span></label>
+                                <input type="number" [(ngModel)]="precio_descuento_agregar" #ctrl="ngModel" class="form-control" (keyup)="keyupCalcularPorcentajeDescuento()">
+                            </div>
+
+                            <label><strong>Descuento Bs. </strong> {{descuento_calculado}}</label>
+
+                            <label><strong>Porcentaje % </strong> {{porcentaje_calculado}}</label>
+
+                            <button class="btn btn-success" (click)="agregarDescuentoCantidad()" style="margin-right: 5px;">AGREGAR DESCUENTO</button>
+                        
+                        </div>
+                        
+                    </div>
+
+            
+                </div>
+                <div class="modal-footer">
+                    
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModal>CERRAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--aqui el componente que se mostrara en el incio-->
+<div class="row">
+    <div class="col-sm-12 col-12">
+        <h4 class="page-title">DESCUENTO POR CANTIDAD DE PRODUCTOS</h4>
+    </div>
+</div>
+
+<div class="card-box">
+    <strong> <p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">CATEGORIAS</p></strong>
+    <div class="row">
+        <ul class="activity-list" style="display: flex; overflow-x: auto;">
+            <li style="min-width: 250px; margin-top: 10px; padding: 0px;" *ngFor="let categoria of listaCategoria">
+                <div style="margin-left: 10px; margin-top: 10px;" class="activity-user">
+                    <a href="javascript:void(0);" (click)="listaGrupoProductoEmpresaStockCeroByCategoriaAlmacenEmpresa(categoria.id)" title="Lesley Grauer" data-toggle="tooltip" class="avatar">
+                        <img alt="Lesley Grauer" src="{{ url }}imagenes/categorias/{{categoria.imagen}}" class="img-fluid rounded-circle">
+                    </a>
+                </div>
+                <div style="margin-top: 12px;" class="activity-content">
+                    <div class="timeline-content">
+                        <a href="javascript:void(0);" (click)="listaGrupoProductoEmpresaStockCeroByCategoriaAlmacenEmpresa(categoria.id)">{{ categoria.nombre }}</a>
+                        <span class="time">{{ categoria.descripcion }}</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-box">
+            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">PRODUCTOS</p></strong>
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-lg-3" style="margin: 0; padding: 0;" *ngFor="let familia of listaFamiliaProductos">
+                    <div class="blog grid-blog"  style="margin: 0; padding: 7px;">
+                        <div class="blog-image">
+                            <a href="javascript:void(0);" data-toggle="modal" data-target="#ModalDecuentoCantidad" (click)="clickAbrirDescuentoCantidad(familia.id)"><img class="img-fluid" src="{{url}}imagenes/productos/{{familia.imagen}}" alt=""></a>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <ul class="list-unstyled text-center" >
+                                    <li><a href="javascript:void(0);" data-toggle="modal" data-target="#ModalDecuentoCantidad" (click)="clickAbrirDescuentoCantidad(familia.id)"><h5 style="margin: 0; padding: 0; font-size: 85%;"><strong>{{familia.grupo}}</strong></h5></a></li>
+                                    <li><span style="margin: 0; padding: 0; font-size: 85%;">{{familia.descripcion}}</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

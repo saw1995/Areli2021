@@ -1,0 +1,212 @@
+<div class="row">
+    <div class="col-sm-12 col-12">
+        <h4 class="page-title">Agregar Nuevo Cliente.</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <strong>Nota: </strong> Tome en cuenta que <a class="alert-link">todos los campos con <span class="text-danger">*</span></a> son obligatorios.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="card-box">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <strong><label>Usuario Areli Shop: <span class="text-danger">*</span></label></strong>
+                        <input type="text" [(ngModel)]="usuario_areli" #ctrl="ngModel" class="form-control" placeholder="Ingrese el nombre de usuario">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <strong><label>Contraseña Areli shop: <span class="text-danger">*</span></label></strong>
+                        <input type="number" [(ngModel)]="contrasena_areli" #ctrl="ngModel" class="form-control" placeholder="Ingrese la contraseña">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-sm-6">
+        <div class="card-box">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <strong><label>Categoría de clientes:<span class="text-danger">*</span></label></strong>
+                        <select [(ngModel)]="id_categoria_cliente" #ctrl="ngModel" class="form-control show-tick">
+                            <option value="" disabled selected>Seleccione la Categoria al que pertenece</option>
+                            <option *ngFor = "let categoria_cliente of listaCategoriaCliente;" [value]="categoria_cliente.id">{{categoria_cliente.nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <strong><label>Tipo de cliente: <span class="text-danger">*</span></label></strong>
+                    <select [(ngModel)]="id_tipo_cliente" #ctrl="ngModel" id="cbExpedicion" class="form-control show-tick">
+                        <option value="" disabled selected>Seleccione el tipo de cliente</option>
+                        <option *ngFor = "let tipo_cliente of listaTipoCliente;" [value]="tipo_cliente.id">{{tipo_cliente.nombre}} - {{tipo_cliente.detalle}}</option>
+                    </select>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <strong><label>Alias de cliente: <span class="text-danger">*</span></label></strong>
+                        <input type="text" [(ngModel)]="alias_cliente" #ctrl="ngModel" class="form-control" placeholder="Ingrese el alias del cliente">
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <strong><label>Correo electronico: <span class="text-danger">*</span></label></strong>
+                        <input type="text" [(ngModel)]="correo_cliente" #ctrl="ngModel" class="form-control" placeholder="Ingrese el correo">
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <strong><label>Teléfono o celular: <span class="text-danger">*</span></label></strong>
+                        <input type="number" [(ngModel)]="telefono_cliente" #ctrl="ngModel" class="form-control" placeholder="Ingrese telefono">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="card-box">
+            <div class="row">
+                
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <strong><label>Persona de contacto: <span class="text-danger">*</span></label></strong>
+                        <input type="text" [(ngModel)]="contacto_cliente" #ctrl="ngModel" class="form-control" placeholder="Ingrese nombre de contacto de cliente">
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <strong><label>Teléfono de contacto: <span class="text-danger">*</span></label></strong>
+                        <input type="text" [(ngModel)]="telefono_contacto_cliente" #ctrl="ngModel" class="form-control" placeholder="Ingrese telefono de contacto de cliente">
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <strong><label>Fotografia del Usuario</label></strong>
+                        <div class="custom-dropzone" ngx-dropzone [multiple]="false" [accept]="'image/*'" (change)="onSelect($event)">
+                            <ngx-dropzone-label>
+                                <div>
+                                    <h2>AGREGAR FOTOGRAFIA</h2>
+                                </div>
+                            </ngx-dropzone-label>
+                            <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+                                <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                            </ngx-dropzone-image-preview>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-sm-12">
+        <div class="card-box">
+            <div class="row">
+                <div class="col-sm-3">
+                    <strong><label>NIT / CI del cliente: <span class="text-danger">*</span></label></strong>
+                    <input type="text" [(ngModel)]="nit_cliente" #ctrl="ngModel" class="form-control" placeholder="Ingrese la referencia">
+                </div>
+                <div class="col-sm-9">
+                    <div class="form-group">
+                        <strong><label>Razón Social o nombre de cliente: <span class="text-danger">*</span></label></strong>
+                        <input type="text" [(ngModel)]="razon_social_cliente" #ctrl="ngModel" class="form-control" placeholder="Ingrese la referencia">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="col-sm-12">
+        <div class="card-box">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <strong><label>Departamento <span class="text-danger">*</span></label></strong>
+                                <select [(ngModel)]="departamento" #ctrl="ngModel" id="cbDepartamento" class="form-control" (click)="listaDepartamentoByEstado()" (change)="changeDepartamento()">
+                                    <option value="" disabled selected>Seleccione un Departamento</option>
+                                    <option *ngFor = "let data of datosDepartamento;" [value]="data.departamento">{{data.departamento}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <strong><label>Provincia <span class="text-danger">*</span></label></strong>
+                            <select [(ngModel)]="provincia" #ctrl="ngModel" id="cbProvincia" class="form-control" (change)="changeProvincia()">
+                                <option value="" disabled selected>Seleccione una Provincia</option>
+                                <option *ngFor = "let data of datosProvincia;" [value]="data.provincia">{{data.provincia}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <strong><label>Municipio(s) <span class="text-danger">*</span></label></strong>
+                                <select [(ngModel)]="id_municipio" #ctrl="ngModel" id="cbMunicipio" class="form-control">
+                                    <option value="" disabled selected>Seleccione un Municipio</option>
+                                    <option *ngFor = "let data of datosMunicipio;" [value]="data.id">{{data.municipio}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <strong><label>Zona <span class="text-danger">*</span></label></strong>
+                                <input type="text" [(ngModel)]="zona_cliente" #ctrl="ngModel" class="form-control" placeholder="Ingrese la zona">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <strong><label>Avenida <span class="text-danger">*</span></label></strong>
+                                <input type="text" [(ngModel)]="avenida_cliente" #ctrl="ngModel" class="form-control" placeholder="Ingrese la Avenida">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <strong><label>Calle <span class="text-danger">*</span></label></strong>
+                                <input type="text" [(ngModel)]="calle_cliente" #ctrl="ngModel" class="form-control" placeholder="Ingrese la calle">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <strong><label>Numero de Casas <span class="text-danger">*</span></label></strong>
+                                <input type="number" [(ngModel)]="numero_casa_cliente" #ctrl="ngModel" class="form-control" placeholder="Nro.">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <strong><label>Referencia del Domicilio <span class="text-danger">*</span></label></strong>
+                                <input type="text" [(ngModel)]="referencia_cliente" #ctrl="ngModel" class="form-control" placeholder="Ingrese la referencia">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <strong><label>Ubicacion Geografica</label></strong>
+                        <div class="map" #mapElement></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+<div class="m-t-20 text-center">
+    <button class="btn btn-success submit-btn" (click)="agregarTienda()" style="margin-right: 5px;">REGISTRAR NUEVO USUARIO</button>
+    <button class="btn btn-danger submit-btn" (click)="navegarHaciaListadoCliente()">CANCELAR</button>
+</div>

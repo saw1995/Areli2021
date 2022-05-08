@@ -1,0 +1,48 @@
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-inner slimscroll">
+        <div class="blog-image">
+            <img class="img-fluid" src="{{url}}imagenes/empresas/{{logo}}" alt="">
+        </div>
+        <div id="sidebar-menu" class="sidebar-menu">
+            <ul>
+                <li class="menu-title">MENU DE NAVEGACION</li>
+                <li class="oculto" [ngClass]="{'acceso': panel_control == 1}">
+                    <a routerLink="/admin"><i class="fa fa-dashboard"></i> <span>Panel de Control</span></a>
+                </li>
+                <li routerLinkActive="active"  class="oculto" [ngClass]="{'acceso': usuarios == 1}">
+                    <a routerLink="/admin/usuario"><i class="fa fa-users"></i> <span>Usuarios</span></a>
+                </li>
+                <li routerLinkActive="active" class="oculto" [ngClass]="{'acceso': categorias == 1}">
+                    <a routerLink="/admin/categoria"><i class="fa fa-book"></i> <span>Categorias</span></a>
+                </li>
+                <li routerLinkActive="active" class="oculto" [ngClass]="{'acceso': almacenes == 1}">
+                    <a routerLink="/admin/almacen/1"><i class="fa fa-university"></i> <span>Almacenes</span></a>
+                </li>
+                <li routerLinkActive="active" class="oculto" [ngClass]="{'acceso': sucursales == 1}">
+                    <a routerLink="/admin/sucursal"><i class="fa fa-home"></i> <span>Sucursales</span></a>
+                </li>
+                <li routerLinkActive="active" class="oculto" [ngClass]="{'acceso': categoria_clientes == 1}">
+                    <a routerLink="/admin/cliente-categoria"><i class="fa fa-address-book"></i> <span>Categoría Cliente</span></a>
+                </li>
+                <li routerLinkActive="active" class="oculto" [ngClass]="{'acceso': clientes == 1}">
+                    <a routerLink="/admin/cliente"><i class="fa fa-child"></i> <span>Clientes</span></a>
+                </li>
+                <li routerLinkActive="active" class="oculto" [ngClass]="{'acceso': rutas == 1}">
+                    <a routerLink="/admin/ruta"><i class="fa fa-map-marker"></i> <span>Rutas</span></a>
+                </li>
+                <li class="submenu" class="oculto" [ngClass]="{'acceso': configuracion == 1}">
+                    <a href="javascript:void(0);"><i class="fa fa-cog"></i> <span>Configuracion</span> <span class="menu-arrow"></span></a>
+                    <ul class="oculto" [ngClass]="{'acceso': usuarios == 1}">
+                        <li><a routerLink="/admin/configuracion/marca-productos"> Marca de productos </a></li>
+                        <li><a routerLink="/admin/configuracion/cargos-accesos"> Cargos y accesos </a></li>
+                        <li><a routerLink="/admin/configuracion/ajuste"> Ajustes </a></li>
+                    </ul>
+                </li>
+                <li class="menu-title">otros</li>
+                <li routerLinkActive="active">
+                    <a routerLink="/admin/acercade"><i class="fa fa-info"></i> <span>Acerca De</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

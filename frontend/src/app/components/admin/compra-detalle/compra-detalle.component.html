@@ -1,0 +1,65 @@
+<div class="row">
+    <div class="col-sm-6">
+        <h4 class="page-title">Detalle de la Compra: <strong>Nro. {{ nro_compra }}</strong> </h4>
+    </div>
+    <div class="col-sm-6">
+        <a href="javascript:void(0);" class="btn btn-primary float-right" (click)="click_compraDetalleAgregar()"><i class="fa fa-plus"></i> Agregar Sucursal</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-box">
+            <h5 class="page-title" style="color: RGB(211, 50, 50);">Detalles de Registro </h5>
+            
+            <div class="row">
+                <div class="col-sm-12" style="margin: 0; padding-right: 20px; border-right: 2px dashed #ccc;">
+                    <ul class="list-unstyled invoice-payment-details">
+                        <li>
+                            <h5>Usuario: <span class="text-right">{{ usuario }}</span></h5>
+                        </li>
+                        <li>Fecha - Hora: <span> {{ fecha }} - {{ hora }}</span></li>
+                        <li>Almacen: <span>{{ nombre_almacen }} (Suc. {{ nombre_sucursal }})</span></li>
+                        <li>Observacion: <span>{{ observacion }}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-box">
+            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">Detalles de Compra</p></strong>
+            <div class="table-responsive">
+                <table class="table table-striped custom-table">
+                    <thead>
+                        <tr>
+                            <th>Cant.</th>
+                            <th>Descripcion</th>
+                            <th>Costo Unit.</th>
+                            <th>SubTotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let detalle of listaDetalle">
+                            <td>{{ detalle.cant_medida }} {{ detalle.medida }}</td>
+                            <td>#{{ detalle.codigo }} {{ detalle.nombre }}</td>
+                            <td>Bs. {{ detalle.costo_medida }}</td>
+                            <td>Bs. {{ detalle.subTotal }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <br>
+            <ul class="list-unstyled invoice-payment-details">
+                <li>
+                    <h5>Total: <span class="text-center"><strong><h4> Bs. {{total}}</h4></strong></span></h5>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>

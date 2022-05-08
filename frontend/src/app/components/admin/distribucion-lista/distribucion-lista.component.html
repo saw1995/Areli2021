@@ -1,0 +1,323 @@
+<div *ngIf="showModalDetalleCarga">
+    <div class="modal fade" id="ModalDetalleCarga" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">DETALLE DE PRE VENTA NRO.</h4>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped custom-table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-right">Nro</th>
+                                        <th class="text-center">Detalle</th>
+                                        <th class="text-center">Cantidad</th>
+                                        <th class="text-center">Precio</th>
+                                        <th class="text-center">Descuento</th>
+                                        <th class="text-center">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let detalle of listaPreVentaDetalle; let i = index;">
+                                        <td class="text-right"> {{i+1}} </td>
+                                        <td>
+                                            <img width="40" height="40" src="{{url}}imagenes/productos/{{detalle.imagen_uno}}" class="rounded-circle m-r-5">
+                                            <h2><a><span>Código: {{ detalle.codigo }}</span>{{ detalle.producto_nombre }} </a></h2>
+                                        </td>
+                                        <td class="text-center"> {{detalle.cantidad}} </td>
+                                        <td class="text-right"> {{detalle.precio |  number:'1.2-2' }} </td>
+                                        <td class="text-right"> {{ (detalle.subtotal - detalle.total_descuento) |  number:'1.2-2' }} </td>
+                                        <td class="text-right"> {{detalle.total_descuento |  number:'1.2-2' }} </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td><h5>Total: </h5></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><span class="text-right"><strong><h4> Bs. {{totalDetalle  | number:'1.2-2' }} </h4></strong></span></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer" style="background-color: rgb(50, 141, 194);">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModal>CERRAR</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-12">
+        <h4 class="page-title">Distribucion</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-box">
+            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">FILTRO DE BUSQUEDA</p></strong>
+            <div class="row">
+                <div class="col-sm-4 text-center">
+                    <strong><label>Fecha de Entrega</label></strong>
+                    <div class="form-group">
+                        <input type="date" [(ngModel)]="fecha_entrega" #ctrl="ngModel" class="form-control date" (change)="changeFechaEntrega()">
+                    </div>
+                </div>
+                <div class="col-sm-4 text-center">
+                    <strong><label>Usuario</label></strong>
+                    <select [(ngModel)]='id_usuario' id="cbUsuario" class="form-control" (change)="changeUsuario()">
+                        <option [value]="" selected disabled> Seleccione un Distribuidor </option>
+                        <option *ngFor = "let data of datosUsuario;" [value]="data.id">{{ data.nombre_rol }} - {{ data.nombre }} {{ data.appat }} {{ data.apmat }}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-box">
+            <h5 class="page-title" STYLE="COLOR: RGB(211, 50, 50);">Resultado de Busqueda</h5>
+            <ul class="nav nav-tabs nav-tabs-solid nav-justified" style="background-color: rgb(189, 189, 189);">
+                <li class="nav-item"><a style="color: rgb(255, 255, 255);" (click)="click_rutaDistribucion()" class="nav-link" href="#solid-justified-tab1" data-toggle="tab">Ruta Distribucion</a></li>
+                <li class="nav-item"><a style="color: rgb(255, 255, 255);" class="nav-link" href="#solid-justified-tab2" data-toggle="tab">Carga de Productos</a></li>
+                <li class="nav-item"><a style="color: rgb(255, 255, 255);" class="nav-link" href="#solid-justified-tab3" data-toggle="tab">Venta de Productos</a></li>
+                <li class="nav-item"><a style="color: rgb(255, 255, 255);" class="nav-link" href="#solid-justified-tab4" data-toggle="tab">Devolucion</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane" id="solid-justified-tab1">
+                    <div class="row">
+                        <div class="col-sm-3" style="padding: 0px; margin: 0px;">
+                            <div class="activity">
+                                <div class="activity-box">
+                                    <ul class="activity-list">
+                                        <li>
+                                            <div class="activity-user"><a class="avatar" title="Total de Puntos" data-toggle="tooltip">TO</a></div>
+                                            <div class="activity-content">
+                                                <div class="timeline-content">
+                                                    <a class="name" style="color: rgb(104, 99, 99);">{{totalPuntos}} Puntos</a>
+                                                    <span class="time" style="color: rgb(104, 99, 99);">Total de Carga</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3" style="padding: 0px; margin: 0px;">
+                            <div class="activity">
+                                <div class="activity-box" >
+                                    <ul class="activity-list" >
+                                        <li>
+                                            <div class="activity-user"><a class="avatar" style="background-color: rgb(230, 20, 20); color: #fff;" title="No Entregados" data-toggle="tooltip">NE</a></div>
+                                            <div class="activity-content">
+                                                <div class="timeline-content" >
+                                                    <a class="name" style="color: rgb(230, 20, 20);">{{NoEntregadoPuntos}} Puntos</a>
+                                                    <span class="time" style="color: rgb(230, 20, 20);">No Entregados</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3" style="padding: 0px; margin: 0px;">
+                            <div class="activity">
+                                <div class="activity-box">
+                                    <ul class="activity-list">
+                                        <li>
+                                            <div class="activity-user"><a class="avatar" style="background-color: rgb(82, 214, 29); color: #fff;" title="Vendidos" data-toggle="tooltip">VE</a></div>
+                                            <div class="activity-content">
+                                                <div class="timeline-content" >
+                                                    <a class="name" style="color: rgb(82, 214, 29);">{{VendidoPuntos}} Puntos</a>
+                                                    <span class="time" style="color: rgb(82, 214, 29);">Vendidos</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3" style="padding: 0px; margin: 0px;">
+                            <div class="activity">
+                                <div class="activity-box">
+                                    <ul class="activity-list">
+                                        <li>
+                                            <div class="activity-user"><a class="avatar" style="background-color: rgb(20, 164, 230); color: #fff;" title="Observaciones" data-toggle="tooltip">OBS</a></div>
+                                            <div class="activity-content">
+                                                <div class="timeline-content" >
+                                                    <a class="name" style="color: rgb(20, 164, 230);">{{ObservacionPuntos}} Puntos</a>
+                                                    <span class="time" style="color: rgb(20, 164, 230);">Con Observacion</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Mapa de Distribucion</label>
+                                <div class="map" #mapElement></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="solid-justified-tab2">
+                    <h5 class="page-title" STYLE="COLOR: RGB(211, 50, 50);">Menu de Opciones</h5>
+                    <ul class="nav nav-tabs nav-tabs-solid nav-justified" style="background-color: rgb(189, 189, 189);">
+                        <li class="nav-item"><a style="color: rgb(255, 255, 255);" (click)="click_cargaTotalCliente('-1')" class="nav-link" href="#solid-justified-tab20" data-toggle="tab">Agrupar por Clientes</a></li>
+                        <li class="nav-item"><a style="color: rgb(255, 255, 255);" class="nav-link" href="#solid-justified-tab21" data-toggle="tab">Agrupar por Productos</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane" id="solid-justified-tab20">
+                            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">RESULTADO DE LA BUSQUEDA</p></strong>
+                            <div class="table-responsive">
+                                <table class="table table-striped custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nro. Carga</th>
+                                            <th>Nro. Pre Venta</th>
+                                            <th>Fecha Registro</th>
+                                            <th>Fecha Entrega</th>
+                                            <th>Cliente</th>
+                                            <th>Vendedor</th>
+                                            <th>Factura</th>
+                                            <th>Estado</th>
+                                            <th>Total</th>
+                                            <th class="text-right">Opc.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let datos of listaPreVenta">
+                                            <td>{{ datos.nro_carga }}</td>
+                                            <td>{{ datos.nro_pre_venta }}</td>
+                                            <td>{{ datos.fecha }} - {{ datos.hora }}</td>
+                                            <td>{{ datos.fecha_entrega }}</td>
+                                            <td>{{ datos.categoria_tienda }} - {{ datos.tipo_tienda }} {{ datos.tienda_cliente }}</td>
+                                            <td>{{ datos.usuario }}</td>
+                                            <td>{{ datos.factura }}</td>
+                                            <td> <span class="custom-badge " [ngClass]="{'status-green': datos.venta=='1', ' status-red': datos.venta=='4', ' status-orange': datos.venta=='3'}">{{datos.venta_estado}}</span></td>
+                                            <td>Bs. {{ datos.total_pre_venta }}</td>
+                                            <td class="text-right">
+                                                <a href="javascript:void(0);" class="btn btn btn-success btn-rounded float-right" data-toggle="modal" data-target="#ModalDetalleCarga" (click)="click_verDetalle(datos.detalle)"><i class="fa fa-eye"></i> </a> 
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="solid-justified-tab3">
+                    <h5 class="page-title" STYLE="COLOR: RGB(211, 50, 50);">Venta de Productos</h5>
+                    <ul class="nav nav-tabs nav-tabs-solid nav-justified" style="background-color: rgb(189, 189, 189);">
+                        <li class="nav-item"><a style="color: rgb(255, 255, 255);" (click)="click_cargaTotalCliente('1')" class="nav-link" href="#solid-justified-tab30" data-toggle="tab">Agrupar por Clientes</a></li>
+                        <li class="nav-item"><a style="color: rgb(255, 255, 255);" class="nav-link" href="#solid-justified-tab31" data-toggle="tab">Agrupar por Productos</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane" id="solid-justified-tab30">
+                            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">RESULTADO DE LA BUSQUEDA</p></strong>
+                            <div class="table-responsive">
+                                <table class="table table-striped custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nro. Carga</th>
+                                            <th>Nro. Pre Venta</th>
+                                            <th>Fecha Registro</th>
+                                            <th>Fecha Entrega</th>
+                                            <th>Cliente</th>
+                                            <th>Vendedor</th>
+                                            <th>Factura</th>
+                                            <th>Estado</th>
+                                            <th>Total</th>
+                                            <th class="text-right">Opc.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let datos of listaPreVentaVenta">
+                                            <td>{{ datos.nro_carga }}</td>
+                                            <td>{{ datos.nro_pre_venta }}</td>
+                                            <td>{{ datos.fecha }} - {{ datos.hora }}</td>
+                                            <td>{{ datos.fecha_entrega }}</td>
+                                            <td>{{ datos.categoria_tienda }} - {{ datos.tipo_tienda }} {{ datos.tienda_cliente }}</td>
+                                            <td>{{ datos.usuario }}</td>
+                                            <td>{{ datos.factura }}</td>
+                                            <td> <span class="custom-badge " [ngClass]="{'status-green': datos.venta=='1', ' status-red': datos.venta=='4', ' status-orange': datos.venta=='3'}">{{datos.venta_estado}}</span></td>
+                                            <td>Bs. {{ datos.total_pre_venta }}</td>
+                                            <td class="text-right">
+                                                <a href="javascript:void(0);" class="btn btn btn-success btn-rounded float-right" data-toggle="modal" data-target="#ModalDetalleCarga" (click)="click_verDetalle(datos.detalle)"><i class="fa fa-eye"></i> </a> 
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="solid-justified-tab4">
+                    <h5 class="page-title" STYLE="COLOR: RGB(211, 50, 50);">Devolucion de Productos</h5>
+                    <ul class="nav nav-tabs nav-tabs-solid nav-justified" style="background-color: rgb(189, 189, 189);">
+                        <li class="nav-item"><a style="color: rgb(255, 255, 255);" (click)="click_cargaTotalCliente('3\',\'4')" class="nav-link" href="#solid-justified-tab40" data-toggle="tab">Agrupar por Clientes</a></li>
+                        <li class="nav-item"><a style="color: rgb(255, 255, 255);" class="nav-link" href="#solid-justified-tab41" data-toggle="tab">Agrupar por Productos</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane" id="solid-justified-tab40">
+                            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">RESULTADO DE LA BUSQUEDA</p></strong>
+                            <div class="table-responsive">
+                                <table class="table table-striped custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nro. Carga</th>
+                                            <th>Nro. Pre Venta</th>
+                                            <th>Fecha Registro</th>
+                                            <th>Fecha Entrega</th>
+                                            <th>Cliente</th>
+                                            <th>Vendedor</th>
+                                            <th>Factura</th>
+                                            <th>Estado</th>
+                                            <th>Total</th>
+                                            <th class="text-right">Opc.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let datos of listaPreVentaDevolucion">
+                                            <td>{{ datos.nro_carga }}</td>
+                                            <td>{{ datos.nro_pre_venta }}</td>
+                                            <td>{{ datos.fecha }} - {{ datos.hora }}</td>
+                                            <td>{{ datos.fecha_entrega }}</td>
+                                            <td>{{ datos.categoria_tienda }} - {{ datos.tipo_tienda }} {{ datos.tienda_cliente }}</td>
+                                            <td>{{ datos.usuario }}</td>
+                                            <td>{{ datos.factura }}</td>
+                                            <td> <span class="custom-badge " [ngClass]="{'status-green': datos.venta=='1', ' status-red': datos.venta=='4', ' status-orange': datos.venta=='3'}">{{datos.venta_estado}}</span></td>
+                                            <td>Bs. {{ datos.total_pre_venta }}</td>
+                                            <td class="text-right">
+                                                <a href="javascript:void(0);" class="btn btn btn-success btn-rounded float-right" data-toggle="modal" data-target="#ModalDetalleCarga" (click)="click_verDetalle(datos.detalle)"><i class="fa fa-eye"></i> </a> 
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div> 
+</div>

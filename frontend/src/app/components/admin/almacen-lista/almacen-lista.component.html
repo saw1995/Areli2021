@@ -1,0 +1,121 @@
+<div *ngIf="showModalAgregarAlmacen">
+    <div class="modal fade" id="modalAgregarAlmacen" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">AGREGAR NUEVO ALMACEN</h4>
+                </div>
+                <div class="card-box">
+                    <div class="row">
+
+                        <div class="col-sm-12">
+                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                <strong>Nota: </strong> Tome en cuenta que <a class="alert-link">todos los campos con <span class="text-danger">*</span></a> son obligatorios.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label><strong>Nombre del Almacen </strong><span class="text-danger">*</span></label>
+                                <input type="text" [(ngModel)]="nombre" #ctrl="ngModel" class="form-control" placeholder="Ingrese el Nombre del almacen">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label><strong>Descripción o Dirección</strong> <span class="text-danger">*</span></label>
+                                <input type="text" [(ngModel)]="descripcion" #ctrl="ngModel" class="form-control" placeholder="Ingrese la Descripcion o Direccion del almacen">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="background-color: rgb(50, 141, 194);">
+                    <button type="button" class="btn btn-success" (click)="agregarAlmacen()">GUARDAR</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModal>CANCELAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showModalActualizarAlmacen">
+    <div class="modal fade" id="modalActualizarAlmacen" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">ACTUALIZAR DATOS DEL ALMACEN</h4>
+                </div>
+                <div class="card-box">
+                    <div class="row">
+
+                        <div class="col-sm-12">
+                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                <strong>Nota: </strong> Tome en cuenta que <a class="alert-link">todos los campos con <span class="text-danger">*</span></a> son obligatorios.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label><strong>Nombre del Almacen</strong> <span class="text-danger">*</span></label>
+                                <input type="text" [(ngModel)]="actualizar_nombre" class="form-control" placeholder="Ingrese el Nombre del almacen">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label><strong>Descripción o Dirección</strong> <span class="text-danger">*</span></label>
+                                <input type="text" [(ngModel)]="actualizar_descripcion" #ctrl="ngModel" class="form-control" placeholder="Ingrese la Descripcion o Direccion del almacen">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="background-color: rgb(50, 141, 194);">
+                    <button type="button" class="btn btn-success" (click)="actualizarDatosAlmacen()">ACTUALIZAR</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModal>CANCELAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-4 col-3">
+        <h4 class="page-title">Almacenes Independientes</h4>
+    </div>
+    <div class="col-sm-8 col-9 text-right m-b-20">
+        <a href="" data-toggle="modal" data-target="#modalAgregarAlmacen" (click)="click_agregarAlmacen()" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Agregar nuevo Almacen</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-striped custom-table">
+                <thead>
+                    <tr>
+                        <th>Almacen</th>
+                        <th>Nombre</th>
+                        <th>Descripcion o Direccion</th>
+                        <th class="text-right">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let almacen of listaAlmacen">
+                        <td><img width="40" height="40" src="assets/plantilla/img/almacen.jpg" class="rounded-circle m-r-5" alt=""></td>
+                        <td>Almacen - {{ almacen.nombre_almacen }}</td>
+                        <td>{{almacen.descripcion}}</td>
+                        <td class="text-right">
+                            <a href="javascript:void(0);" (click)="clickSeleecionarAlmacen(almacen.id_almacen, almacen.nombre_almacen, almacen.descripcion)" class="btn btn btn-success btn-rounded float-right"><i class="fa fa-eye"></i> </a> 
+                            <a href="javascript:void(0);" data-toggle="modal" data-target="#modalActualizarAlmacen" (click)="clickActualizarAlmacen(almacen.id_almacen, almacen.nombre_almacen, almacen.descripcion)" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-pencil"></i> </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

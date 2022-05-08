@@ -1,0 +1,116 @@
+<div *ngIf="showModalAsignarUsuarios">
+    <div class="modal fade" id="ModalAsignarUsuarios" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">ASIGNAR USUARIOS PARA VER LA RUTA</h4>
+                </div>
+                <div class="card-box">
+                    <div class="row">
+
+                        <div class="col-lg-6">
+                            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">LISTA USUARIOS</p></strong>
+                            <table class="table table-striped custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nº</th>
+                                        <th>Usuario</th>
+                                        <th>Cargo</th>
+                                        <th>Opcion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let usuario of listaUsuariosDeshabilitados;let indice = index">
+                                        <td>{{indice + 1}}</td>
+                                        <td>{{usuario.nombre_usuario}}, {{usuario.appat}} {{usuario.apmat}}</td>
+                                        <td>{{usuario.nombre_rol}}</td>
+                                        <td>
+                                            <div class="body">
+                                                <button type="button" class="btn btn-success" (click)=agregarRutaUsuario(usuario.id)>Agregar</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">USUARIOS ASIGNADOS A RUTA</p></strong>
+                            <table class="table table-striped custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nº</th>
+                                        <th>Usuario</th>
+                                        <th>Cargo</th>
+                                        <th>Opcion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let usuario of listaUsuarioshabilitados;let indice = index">
+                                        <td>{{indice + 1}}</td>
+                                        <td>{{usuario.nombre_usuario}}, {{usuario.appat}} {{usuario.apmat}}</td>
+                                        <td>{{usuario.nombre_rol}}</td>
+                                        <td>
+                                            <div class="body">
+                                                <button type="button" class="btn btn-danger" (click)=eliminarRutaUsuarioById(usuario.id)>Quitar</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+ 
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModal>CERRAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Aqui el componnente pricnipal-->
+
+<div class="row">
+    <div class="col-sm-4 col-3">
+        <h4 class="page-title">Lista de Rutas</h4>
+    </div>
+    <div class="col-sm-8 col-9 text-right m-b-20">
+        <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 5px;" (click)="click_agregarNuevaRuta()"><i class="fa fa-plus"></i> Agregar nueva Ruta</a> 
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="profile-widget">
+            <div class="table-responsive">
+                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table row-border hover">
+                  <thead>
+                    <tr>
+                        <th>Nº</th>
+                        <th>Ruta</th>
+                        <th>Descripción</th>
+                        <th>Opciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let ruta of listaRutas;let indice = index;">
+                        <td>{{ indice + 1}}</td>
+                        <td>{{ ruta.nombre }}</td>
+                        <td>{{ ruta.descripcion }}</td>
+                        <td>
+                            <div class="body">
+                                <button class="btn btn-success" style="margin-right: 5px;">Ver Detalles</button>
+                                <button class="btn btn-primary" style="margin-right: 5px;"  
+                                data-toggle="modal" data-target="#ModalAsignarUsuarios" (click)="click_AbrirModalAsignarUsuario(ruta.id_ruta)">Asignar usuarios</button>
+                            </div>
+                        </td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

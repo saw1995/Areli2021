@@ -1,0 +1,104 @@
+<!--modales para mostrar-->
+<div *ngIf="showModalAjustePrecioProducto">
+    <div class="modal fade" id="ModalAjustePrecioProducto" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">AJUSTAR PRECIO DE PRODUCTO</h4>
+                </div>
+                <div class="card-box">
+                    <div class="row">
+
+                        <div class="col-lg-12">
+                            <label ><strong>Producto </strong> {{producto_selecionado}} </label>
+                            <br>
+
+                            <label ><strong>Precio sugerido:  </strong> {{precio_sugerido_calculado}}  </label>
+
+                        </div>
+
+                        <div class="col-lg-11">
+                            <h5>Seleecione una presentacion</h5>
+                            <small>Para ajustar el precio sugerido, seleccione una presentación del producto y luego ingrese el nuevo precio.</small>
+                        </div>
+                        
+                        <br><br>
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label><strong>Presentación producto: </strong><span class="text-danger">*</span></label>
+                                <select [(ngModel)]="rango_medida" #ctrl="ngModel" class="form-control select" (change)="calcularPrecioSugerido()">
+                                    <option value="0" disabled selected>Seleccione una medida</option>
+                                    <option *ngFor = "let presentacion of listaMedidaProducto;" [value]="presentacion.unidad">{{ presentacion.medida }} ({{presentacion.unidad}} Uds.)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label><strong>Nuevo precio de venta: </strong><span class="text-danger">*</span></label>
+                                <input type="number" [(ngModel)]="precio_sugerido_calculado" #ctrl="ngModel" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+            
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" (click)="actualizarPrecioSugeridoByProductoGrupoAlmacen()">AJUSTAR PRECIO</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModal>CERRAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--aqui el componente que se mostrara en el incio-->
+<div class="row">
+    <div class="col-sm-12 col-12">
+        <h4 class="page-title">Ajuste de precios de productos</h4>
+    </div>
+</div>
+
+<div class="card-box">
+    <strong> <p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">CATEGORIAS</p></strong>
+    <div class="row">
+        <ul class="personal-info" style="display: flex; overflow-x: auto;">
+            <li style="margin: 10px; padding: 0px;" *ngFor="let categoria of listaCategoria">
+                <a href="javascript:void(0);" (click)="listaGrupoProductoEmpresaStockCeroByCategoriaAlmacenEmpresa(categoria.id)">
+                    <div class="blog grid-blog my-category" style="background-image: url('{{ url }}imagenes/categorias/{{categoria.imagen}}'); ">
+                        <div class="background-category">
+                            <h5 class="doctor-name text-center name-category">{{ categoria.nombre }}</h5>
+                            <p class="doctor-name text-center description-category">{{ categoria.descripcion }}</p>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-box">
+            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">PRODUCTOS</p></strong>
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-lg-3" style="margin: 0; padding: 0;" *ngFor="let familia of listaFamiliaProductos">
+                    <div class="blog grid-blog"  style="margin: 0; padding: 7px;">
+                        <div class="blog-image">
+                            <a href="javascript:void(0);" data-toggle="modal" data-target="#ModalAjustePrecioProducto" (click)="clickAbrirAjustarPrecio(familia.id, familia.grupo)"><img class="img-fluid" src="{{url}}imagenes/productos/{{familia.imagen}}" alt=""></a>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <ul class="list-unstyled text-center" >
+                                    <li><a href="javascript:void(0);" data-toggle="modal" data-target="#ModalAjustePrecioProducto" (click)="clickAbrirAjustarPrecio(familia.id, familia.grupo)"><h5 style="margin: 0; padding: 0; font-size: 85%;"><strong>{{familia.grupo}}</strong></h5></a></li>
+                                    <li><span style="margin: 0; padding: 0; font-size: 85%;">{{familia.descripcion}}</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

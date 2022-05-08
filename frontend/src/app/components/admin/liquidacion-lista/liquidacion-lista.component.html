@@ -1,0 +1,568 @@
+<div *ngIf="showModalListaProductoCarga">
+    <div class="modal fade" id="ModalListaProductoCarga" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">LISTA DE CARGAS ASIGNADOS PENDIENTES</h4>
+                </div>
+                <div class="card-box">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-striped custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nro Carga</th>
+                                            <th>Fecha</th>
+                                            <th>Total.</th>
+                                            <th>usuario.</th>
+                                            <th class="text-right">Opciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of listaCargasByUsuario">
+                                            <td>{{ item.nro_carga }}</td>
+                                            <td>{{ item.fecha_entrega }}</td>
+                                            <td>Bs./ {{ item.total_descuento | number:'1.2-2' }}</td>
+                                            <td>{{item.usuario}}</td>
+                                            <td class="text-right">
+                                                <a href="javascript:void(0);" class="btn btn btn-success btn-rounded float-right"
+                                                data-toggle="modal" data-target="#ModalProductosCarga"
+                                                (click)="click_abrirDetalleProductosPendientes(item.nro_carga)"><i class="fa fa-eye"></i> </a> 
+                                                <a href="javascript:void(0);" class="btn btn btn-primary btn-rounded float-right" 
+                                                (click)="actualizarLiquidacionPagoSobrante(item.nro_carga)"><i class="fa fa-pencil"></i> </a>                                                
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="background-color: rgb(50, 141, 194);">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModal>CANCELAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showModalProductosCarga">
+    <div class="modal fade" id="ModalProductosCarga" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">LISTA DE PRODUCTOS PENDIENTES</h4>
+                </div>
+                <div class="card-box">
+                    <div class="row">
+
+                        <label><strong>SALDO DISPONIBLE: </strong>Bs. {{ sobrante_liquidacion_seleccionado }}</label>
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-striped custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Nro Pre-Venta</th>
+                                            <th>Detalle.</th>
+                                            <th>Precio.</th>
+                                            <th>Cantidad.</th>
+                                            <th>SubTotal.</th>
+                                            <th class="text-right">Opciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of listaProductosLiquidacion">
+                                            <td>{{ item.fecha_entrega }}</td>
+                                            <td>{{ item.nro_pre_venta }}</td>
+                                            <td>
+                                                <img width="40" height="40" src="{{url}}imagenes/productos/{{item.imagen_uno}}" class="rounded-circle m-r-5" alt="">
+                                                {{ item.nombre }}
+                                            </td>
+                                            <td>Bs. {{ item.precio | number:'1.2-2' }}</td>
+                                            <td>{{item.cantidad}}</td>
+                                            <td>Bs. {{ item.total_descuento | number:'1.2-2' }}</td>
+                                            <td class="text-right">
+                                                <a href="javascript:void(0);" class="btn btn btn-primary btn-rounded float-right" 
+                                                (click)="actualizarLiquidacionItemProducto(item.id, item.total_descuento)"><i class="fa fa-pencil"></i></a>                                                
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="background-color: rgb(50, 141, 194);">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModal>CANCELAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showModalAgregarLiquidacion">
+    <div class="modal fade" id="modalAgregarLiquidacion" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">REGISTRAR NUEVA LIQUIDACION</h4>
+                </div>
+                <div class="card-box">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                <strong>Nota: </strong> Tome en cuenta que <a class="alert-link">todos los campos con <span class="text-danger">*</span></a> son obligatorios.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="doctor-img">
+                                            <a class="avatar" href="javascript:void(0);"><img class="center_image" alt="" src="assets/plantilla/img/centavo10.jpg"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label><strong>10 centavos </strong></label>
+                                        <input type="number" [(ngModel)]="corteCentavo10" #ctrl="ngModel" class="form-control" placeholder="Ingrese la informacion" (keyup)="calcularTotal()">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group text-center">
+                                        <label>SubTotal</label>
+                                        <br>
+                                        <label><strong>Bs. {{ subTotalCentavo10 }} </strong></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="doctor-img">
+                                            <a class="avatar" href="javascript:void(0);"><img class="center_image " alt="" src="assets/plantilla/img/centavo20.jpg"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label><strong>20 centavos </strong></label>
+                                        <input type="number" [(ngModel)]="corteCentavo20" #ctrl="ngModel" class="form-control" placeholder="Ingrese la informacion" (keyup)="calcularTotal()">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group text-center">
+                                        <label>SubTotal</label>
+                                        <br>
+                                        <label><strong>Bs. {{ subTotalCentavo20 }} </strong></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="doctor-img">
+                                            <a class="avatar" href="javascript:void(0);"><img class="center_image " alt="" src="assets/plantilla/img/centavo50.jpg"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label><strong>50 centavos </strong></label>
+                                        <input type="number" [(ngModel)]="corteCentavo50" #ctrl="ngModel" class="form-control" placeholder="Ingrese la informacion" (keyup)="calcularTotal()">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group text-center">
+                                        <label>SubTotal</label>
+                                        <br>
+                                        <label><strong>Bs. {{ subTotalCentavo50 }} </strong></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="doctor-img">
+                                            <a class="avatar" href="javascript:void(0);"><img class="center_image " alt="" src="assets/plantilla/img/moneda1.jpg"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label><strong>Moneda Bs. 1 </strong></label>
+                                        <input type="number" [(ngModel)]="corte1" #ctrl="ngModel" class="form-control" placeholder="Ingrese la informacion" (keyup)="calcularTotal()">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group text-center">
+                                        <label>SubTotal</label>
+                                        <br>
+                                        <label><strong>Bs. {{ subTotal1 }} </strong></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="doctor-img">
+                                            <a class="avatar" href="javascript:void(0);"><img class="center_image " alt="" src="assets/plantilla/img/moneda2.jpg"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label><strong>Moneda Bs. 2 </strong></label>
+                                        <input type="number" [(ngModel)]="corte2" #ctrl="ngModel" class="form-control" placeholder="Ingrese la informacion" (keyup)="calcularTotal()">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group text-center">
+                                        <label>SubTotal</label>
+                                        <br>
+                                        <label><strong>Bs. {{ subTotal2 }} </strong></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="doctor-img">
+                                            <a class="avatar" href="javascript:void(0);"><img class="center_image " alt="" src="assets/plantilla/img/moneda5.jpg"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label><strong>Moneda Bs. 5 </strong></label>
+                                        <input type="number" [(ngModel)]="corte5" #ctrl="ngModel" class="form-control" placeholder="Ingrese la informacion" (keyup)="calcularTotal()">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group text-center">
+                                        <label>SubTotal</label>
+                                        <br>
+                                        <label><strong>Bs. {{ subTotal5 }} </strong></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="doctor-img">
+                                            <a class="" href="javascript:void(0);"><img class="center_image_billete " alt="" src="assets/plantilla/img/billete10.jpg"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label><strong>Billete de Bs. 10 </strong></label>
+                                        <input type="number" [(ngModel)]="corte10" #ctrl="ngModel" class="form-control" placeholder="Ingrese la informacion" (keyup)="calcularTotal()">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group text-center">
+                                        <label>SubTotal</label>
+                                        <br>
+                                        <label><strong>Bs. {{ subTotal10 }} </strong></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="doctor-img">
+                                            <a class="" href="javascript:void(0);"><img class="center_image_billete " alt="" src="assets/plantilla/img/billete20.jpg"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label><strong>Billete de Bs. 20 </strong></label>
+                                        <input type="number" [(ngModel)]="corte20" #ctrl="ngModel" class="form-control" placeholder="Ingrese la informacion" (keyup)="calcularTotal()">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group text-center">
+                                        <label>SubTotal</label>
+                                        <br>
+                                        <label><strong>Bs. {{ subTotal20 }} </strong></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="doctor-img">
+                                            <a class="" href="javascript:void(0);"><img class="center_image_billete " alt="" src="assets/plantilla/img/billete50.jpg"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label><strong>Billete de Bs. 50 </strong></label>
+                                        <input type="number" [(ngModel)]="corte50" #ctrl="ngModel" class="form-control" placeholder="Ingrese la informacion" (keyup)="calcularTotal()">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group text-center">
+                                        <label>SubTotal</label>
+                                        <br>
+                                        <label><strong>Bs. {{ subTotal50 }} </strong></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="doctor-img">
+                                            <a class="" href="javascript:void(0);"><img class="center_image_billete " alt="" src="assets/plantilla/img/billete100.jpg"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label><strong>Billete de Bs. 100 </strong></label>
+                                        <input type="number" [(ngModel)]="corte100" #ctrl="ngModel" class="form-control" placeholder="Ingrese la informacion" (keyup)="calcularTotal()">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group text-center">
+                                        <label>SubTotal</label>
+                                        <br>
+                                        <label><strong>Bs. {{ subTotal100 }} </strong></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="doctor-img">
+                                            <a class="" href="javascript:void(0);"><img class="center_image_billete " alt="" src="assets/plantilla/img/billete200.jpg"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label><strong>Billete de Bs. 200 </strong></label>
+                                        <input type="number" [(ngModel)]="corte200" #ctrl="ngModel" class="form-control" placeholder="Ingrese la informacion" (keyup)="calcularTotal()">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group text-center">
+                                        <label>SubTotal</label>
+                                        <br>
+                                        <label><strong>Bs. {{ subTotal200 }} </strong></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group text-center">
+                                        <label>SubTotal en Monedas</label>
+                                        <br>
+                                        <h3><strong>Bs. {{ subTotalMoneda }} </strong></h3>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group text-center">
+                                        <label>SubTotal en Billetes</label>
+                                        <br>
+                                        <h3><strong>Bs. {{ subTotalBillete }} </strong></h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label><strong>Observacion:</strong></label>
+                                <input type="text" [(ngModel)]="observacion" #ctrl="ngModel" class="form-control" placeholder="Ingrese una observacion">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label><strong>Usuario:</strong></label>
+                                <select [(ngModel)]='id_usuario_liquidacion_agregar' id="cbUsuario" class="form-control">
+                                    <option value="" disabled selected>Seleccione un Usuario</option>
+                                    <option *ngFor = "let data of datosUsuarioAdmAgregar;" [value]="data.id">{{ data.nombre_rol }} - {{ data.nombre }} {{ data.appat }} {{ data.apmat }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group text-center">
+                                <label>Importe Total:</label>
+                                <br>
+                                <h3><strong>Bs. {{ totalBolivianos }} </strong></h3>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" (click)="agregarLiquidacion()">REGISTRAR LIQUIDACION</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModal>CERRAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-4 col-3">
+        <h4 class="page-title">Lista de Liquidaciones.</h4>
+    </div>
+    <div class="col-sm-8 col-9 text-right m-b-20">
+        <a href="avascript:void(0);" (click)="click_gregarCategoria()" data-toggle="modal" data-target="#modalAgregarLiquidacion" class="btn btn btn-primary float-right"><i class="fa fa-plus"></i> Agregar Liquidacion</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-box">
+            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">FILTRO DE BUSQUEDA</p></strong>
+            <div class="row">
+                <div class="col-sm-6 text-center">
+                    <strong><label>Buscar por: </label></strong>
+                    <div class="row" style="margin-left: 30px;">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" id="rbMes" (click)="clickRbMes()" checked>
+                            <label class="form-check-label" for="gender_male">
+                                Busqueda por Mes
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" id="rbFecha" (click)="clickRbFecha()">
+                            <label class="form-check-label" for="gender_female">
+                                Busqueda por Fecha
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 text-center">
+                    <strong><label>Generar en Documento: </label></strong>
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <img width="30px" src="assets/svg/ic_pdf.svg" alt="insertar SVG con la etiqueta image" (click)="reporteGenerar()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-3 text-center">
+                    <strong><label>{{ rangoUno }}</label></strong>
+                    <select [(ngModel)]='mes' id="cbMes" class="form-control" (change)="changeMes()">
+                        <option value="1">Enero</option>
+                        <option value="2">Febrero</option>
+                        <option value="3">Marzo</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Mayo</option>
+                        <option value="6">Junio</option>
+                        <option value="7">Julio</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+                    <div class="form-group" id="divFechaInicio" style="display:none">
+                        <input type="date" [(ngModel)]="fecha_inicio" #ctrl="ngModel" class="form-control date" (change)="changeFechaFinal()">
+                    </div>
+                </div>
+                <div class="col-sm-3 text-center">
+                    <strong><label>{{ rangoDos }}</label></strong>
+                    <select [(ngModel)]='gestionActual' id="cbGestion" class="form-control" (change)="changeGestion()">
+                        <option *ngFor = "let data of datosGestion;" [value]="data.gestion">{{ data.gestion }}</option>
+                    </select>
+                    <div class="form-group" id="divFechaFinal" style="display:none">
+                        <input type="date" [(ngModel)]="fecha_final" #ctrl="ngModel" class="form-control date" (change)="changeFechaInicio()">
+                    </div>
+                </div>
+
+                <div class="col-sm-3 text-center">
+                    <strong><label>Usuario Liquidado</label></strong>
+                    <select [(ngModel)]='id_usuario_liquidacion' id="cbUsuario" class="form-control" (change)="changeUsuario()">
+                        <option [value]="0" selected> Todos </option>
+                        <option *ngFor = "let data of datosUsuarioLiquidacion;" [value]="data.id">{{ data.nombre_rol }} - {{ data.nombre }} {{ data.appat }} {{ data.apmat }}</option>
+                    </select>
+                </div>
+
+
+                <div class="col-sm-3 text-center">
+                    <strong><label>Usuario que registro</label></strong>
+                    <select [(ngModel)]='id_usuario_adm' id="cbUsuario" class="form-control" (change)="changeUsuario()">
+                        <option [value]="0" selected> Todos </option>
+                        <option *ngFor = "let data of datosUsuarioAdm;" [value]="data.id">{{ data.nombre_rol }} - {{ data.nombre }} {{ data.appat }} {{ data.apmat }}</option>
+                    </select>
+                </div>
+
+            
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="card-box">
+            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">RESULTADO DE LA BUSQUEDA</p></strong>
+            <div class="table-responsive">
+                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped custom-table">
+                    <thead>
+                        <tr>
+                            <th>Nro.</th>
+                            <th>Fecha - Hora</th>
+                            <th>Detalle.</th>
+                            <th>Liquidado A.</th>
+                            <th>Usuario.</th>
+                            <th>SubTotal.</th>
+                            <th>Saldo.</th>
+                            <th class="text-right">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let datos of datosLiquidacion;let i = index;">
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ datos.fecha }} - {{ datos.hora }}</td>
+                            <td>{{ datos.observacion }}</td>
+                            <td>
+                                <h2><a>{{ datos.usuario_liquidacion }} <span>{{datos.rol_usuario_liquidacion}}</span></a></h2>
+                            </td>
+                            <td>
+                                <h2><a>{{ datos.usuario_adm }} <span>{{ datos.rol_usuario_adm }}</span></a></h2>
+                            </td>
+                            <td>Bs. {{ datos.total | number:'1.2-2' }}</td>
+                            <td>Bs. {{ datos.sobrante | number:'1.2-2' }}</td>
+                            <td class="text-right">
+                                <a href="javascript:void(0);" class="btn btn btn-success btn-rounded float-right" data-toggle="modal" data-target="#ModalListaProductoCarga"
+                                (click)="click_AbrirListaCargaProductos(datos.id_usuario_cuenta, datos.id_liquidacion, datos.sobrante)"><i class="fa fa-eye"></i> </a> 
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <br>
+            <ul class="list-unstyled invoice-payment-details">
+                <li>
+                    <h5>Total: <span class="text-center"><strong><h4> Bs. {{total_suma_liquidacion}}</h4></strong></span></h5>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+
+</div>

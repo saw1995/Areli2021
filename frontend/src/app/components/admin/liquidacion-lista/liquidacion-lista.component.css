@@ -1,0 +1,12 @@
+.center_image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: bottom;
+  }
+
+  .center_image_billete {
+    width: 100%;
+    object-fit: cover;
+    object-position: bottom;
+  }

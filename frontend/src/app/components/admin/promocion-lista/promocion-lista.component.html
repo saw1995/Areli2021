@@ -1,0 +1,110 @@
+<!--modales para mostrar-->
+<div *ngIf="showModalPromocionDetalle">
+    <div class="modal fade" id="modalPromocionDetalle" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">DETALLES DE LA PROMOCION</h4>
+                </div>
+                <div class="card-box">
+                    <div class="row">
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModal>CERRAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-4 col-3">
+        <h4 class="page-title">Lista de Promociones</h4>
+    </div>
+    <div class="col-sm-8 col-9 text-right m-b-20">
+        <a href="javascript:void(0);" (click)="click_agregarPromocion()" class="btn btn btn-primary float-right"><i class="fa fa-plus"></i> Agregar Promocion</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-box">
+            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">PRMOCIONES ACTUALES</p></strong>
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-lg-3" style="margin: 0; padding: 0;" *ngFor="let promocion of listaPromocion">
+                    <div class="blog grid-blog"  style="margin: 0; padding: 7px;">
+                        <div id="id{{promocion.id_promocion}}" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                <li *ngFor="let imagen of promocion.imagen; let i = index" data-target="#idproducto.id_promocion" data-slide-to="i" [ngClass]="{'active': i == 0}"></li>
+                            </ol>
+                            <div class="carousel-inner">
+                              <div *ngFor="let imagen of promocion.imagen; let i = index"  class="carousel-item" [ngClass]="{'active': i == 0}">
+                                <img class="d-block w-100" src="{{url}}imagenes/promociones/{{imagen}}" alt="First slide">
+                              </div>
+                            </div>
+                            <a class="carousel-control-prev" href="#id{{promocion.id_promocion}}" role="button" data-slide="prev">
+                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#id{{promocion.id_promocion}}" role="button" data-slide="next">
+                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <ul class="list-unstyled text-center" >
+                                    <li><a href="javascript:void(0);" data-toggle="modal" data-target="#modalPromocionDetalle" (click)="click_promocionDetalle(promocion.id_promocion)"><h5 style="margin: 0; padding: 0; font-size: 85%;"><strong>{{promocion.nombre}}</strong></h5></a></li>
+                                    <li><span style="margin: 0; padding: 0; font-size: 85%;">{{promocion.descripcion}}</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-box">
+            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">HISTORIAL DE PROMOCIONES</p></strong>
+            <div class="table-responsive">
+                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped custom-table">
+                    <thead>
+                        <tr>
+                            <th>Nro.</th>
+                            <th>Fotografia</th>
+                            <th>Promocion</th>
+                            <th>Precio</th>
+                            <th>Fecha Inicio</th>
+                            <th>Fecha Final</th>
+                            <th>Limite</th>
+                            <th>Usuario</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let promocion of listaHistorialPromocion;let i = index;">
+                            <td>{{ i + 1 }}</td>
+                            <td>
+                                <div class="doctor-img">
+                                    <img class="center_image avatar" alt="" src="{{ url }}imagenes/promociones/{{promocion.imagen}}">
+                                </div>
+                            </td>
+                            <td><h2><a>{{ promocion.nombre }} <span>{{ promocion.descripcion }}</span></a></h2></td>
+                            <td>Bs. {{ promocion.precio }}</td>
+                            <td>{{ promocion.fecha_inicio }}</td>
+                            <td>{{ promocion.fecha_limite }}</td>
+                            <td>{{ promocion.cantidad_limite }}</td>
+                            <td>{{ promocion.usuario }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

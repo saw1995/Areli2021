@@ -1,0 +1,496 @@
+<!--modales para mostrar-->
+<div *ngIf="showModalCambiarClave">
+    <div class="modal fade" id="ModalCambiarClave" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-default-size" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">CAMBIAR CONTRASEÑA USUARIO</h4>
+                </div>
+                <div class="card-box">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                <strong>Nota: </strong> Se recomienda <a class="alert-link">cambiar la contaseña</a> a menudo.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label><strong>Contraseña actual:</strong><span class="text-danger">*</span></label>
+                                <input type="password" [(ngModel)]="passAnterior" #ctrl="ngModel" class="form-control" placeholder="Ingrese la contraseña actual">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label><strong>Nueva Contraseña:</strong><span class="text-danger">*</span></label>
+                                <input type="password" [(ngModel)]="passNuevo_uno" #ctrl="ngModel" class="form-control" placeholder="Ingrese la nueva contraseña">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label><strong>Repita la contraseña:</strong><span class="text-danger">*</span></label>
+                                <input type="password" [(ngModel)]="passNuevo_dos" #ctrl="ngModel" class="form-control" placeholder="Ingrese la nueva contraseañ">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" (click)="actualizarPassById()">CAMBIAR CONTRASEÑA</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModal>CERRAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--modales para mostrar-->
+<div *ngIf="showModalUbicacionMaps">
+    <div class="modal fade" id="ModalUbicacionMaps" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-default-size" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">UBICACIÓN PUNTO EN GOOGLE MAPS</h4>
+                </div>
+                <div class="card-box">
+
+                    <div class="map" #mapElement></div>
+
+                    <div class="row">
+                    
+                        <strong><label>Ubicacion Geográfica</label></strong>
+                        <br>
+
+                       
+                     
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModal>CERRAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--aqui los componentes q se mostraran-->
+<div class="row">
+    <div class="col-sm-4 col-6">
+        <h4 class="page-title">Perfil de Usuario</h4>
+    </div>
+
+    <div class="col-sm-8 col-6 text-right">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gender" id="rbHabilitado" [checked]="usuario_habilitado" (click)="actualizarEstadoByIdUsuario(1)">
+            <label class="form-check-label" for="gender_male">
+                HABILITADO
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gender" id="rbDeshabilitado" [checked]="!usuario_habilitado" (click)="actualizarEstadoByIdUsuario(0)">
+            <label class="form-check-label" for="gender_female">
+                DESHABILITADO
+            </label>
+        </div>
+        <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 5px;" (click)="clickNavegarHaciaActualizarUsuario()"><i class="fa fa-pencil"></i> Actualizar datos</a> 
+        <a href="javascript:void(0);" class="btn btn-primary" data-toggle="modal" data-target="#ModalCambiarClave" (click)='clickActualizarClave()'><i class="fa fa-key"></i> Cambiar contraseña de acceso</a>
+    </div>
+</div>
+
+<div class="card-box profile-header">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="profile-view">
+                <div class="profile-img-wrap">
+                    <div class="profile-img">
+                        <a href="javascript:void(0);"><img class="avatar" src="{{url}}imagenes/usuarios/{{imagen_usuario}}" alt=""></a>
+                    </div> 
+                </div>
+                <div class="profile-basic">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="profile-info-left">
+                                <h3 class="user-name m-t-0 mb-0">{{nombre_usuario}}</h3>
+                                <small class="text-muted">{{nombre_rol}}</small>
+                                <br><br>
+                                <ul class="personal-info">
+                                    <li>
+                                        <span class="title">C.I.:</span>
+                                        <span class="text">{{ci_usuario}} EXP. {{expedicion_usuario}}</span>
+                                    </li>
+                                    <li>
+                                        <span class="title">Nombre(s):</span>
+                                        <span class="text">{{nombre_usuario}}</span>
+                                    </li>
+                                    <li>
+                                        <span class="title">Ap. paterno:</span>
+                                        <span class="text">{{apellido_paterno_usuario}}</span>
+                                    </li>
+                                    <li>
+                                        <span class="title">Ap. materno:</span>
+                                        <span class="text">{{apellido_materno_usuario}}</span>
+                                    </li>
+                                    <li>
+                                        <span class="title">Genero:</span>
+                                        <span class="text">{{genero_usuario}}</span>
+                                    </li>
+                                    <li>
+                                        <span class="title">E. Civil:</span>
+                                        <span class="text">{{estado_civil_usuario}}</span>
+                                    </li>
+                                    <li>
+                                        <span class="title">Estudio:</span>
+                                        <span class="text">{{estudio_usuario}}</span>
+                                    </li>
+                                    
+                                    <li>
+                                        <span class="title">Teléfono celular:</span>
+                                        <span class="text"><a href="javascript:void(0);">{{telefono_usuario}}</a></span>
+                                    </li>
+                                    <li>
+                                        <span class="title">Email o correo:</span>
+                                        <span class="text"><a href="javascript:void(0);">{{correo_usuario}}</a></span>
+                                    </li>
+                                    <li>
+                                        <span class="title">Fecha de nacimiento:</span>
+                                        <span class="text">{{fecha_nacimiento_usuario}}</span>
+                                    </li>
+                                    <li>
+                                        <span class="title">Edad:</span>
+                                        <span class="text">{{edad_usuario}}</span>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <ul class="personal-info">
+                                
+                                <li>
+                                    <span class="title">Ciudad:</span>
+                                    <span class="text">{{departamento}}, {{provincia}} - {{municipio_usuario}}</span>
+                                </li>
+                                <li>
+                                    <span class="title">Zona:</span>
+                                    <span class="text">{{zona_usuario}}</span>
+                                </li>
+                                <li>
+                                    <span class="title">Avenida:</span>
+                                    <span class="text">{{avenida_usuario}}</span>
+                                </li>
+                                <li>
+                                    <span class="title">Calle:</span>
+                                    <span class="text">{{calle_usuario}}</span>
+                                </li>
+                                <li>
+                                    <span class="title">Número domicilio:</span>
+                                    <span class="text">{{numero_casa_usuario}}</span>
+                                </li>
+                                <li>
+                                    <span class="title">Referencia:</span>
+                                    <span class="text">{{referencia_usuario}}</span>
+                                </li>
+                                <li>
+                                    <div>
+                                        <strong><label>Ubicacion Geográfica</label></strong>
+                                        <div class="map" #mapElement></div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+
+<br>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card-box">
+            <h5 class="page-title" STYLE="COLOR: RGB(211, 50, 50);">Menu de Opciones</h5>
+            <ul class="nav nav-tabs nav-tabs-solid nav-justified" style="background-color: rgb(189, 189, 189);">
+                <li class="nav-item"><a style="color: rgb(255, 255, 255);" class="nav-link" href="#solid-justified-tab1" data-toggle="tab">Cuenta</a></li>
+                <li class="nav-item"><a style="color: rgb(255, 255, 255);" class="nav-link" href="#solid-justified-tab2" data-toggle="tab">Distribucion</a></li>
+                <li class="nav-item"><a style="color: rgb(255, 255, 255);" class="nav-link" href="#solid-justified-tab3" data-toggle="tab">Ventas</a></li>
+                <li class="nav-item"><a style="color: rgb(255, 255, 255);" class="nav-link" href="#solid-justified-tab4" data-toggle="tab">Seguridad</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane" id="solid-justified-tab1">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="widget category-widget">
+                                <h5>Opciones</h5>
+                                <ul class="categories nav">
+                                    <li><a href="#solid-justified-tab10" data-toggle="tab" (click)="click_abrirSaldo()"><i class="fa fa-cart-plus"></i> Saldos</a></li>
+                                    <li><a href="#solid-justified-tab20" data-toggle="tab" ><i class="fa fa-list"></i> Ingresos</a></li>
+                                    <li><a href="#solid-justified-tab30" data-toggle="tab" ><i class="fa fa-list"></i> Salidas</a></li>
+                                    <li><a href="#solid-justified-tab40" data-toggle="tab" ><i class="fa fa-cog"></i> Pendientes</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-sm-10">
+                            <div class="tab-content">
+                                <div class="tab-pane" id="solid-justified-tab10">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-6">
+                                            <h4 class="page-title">Saldo de la Cuenta</h4>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-12" >
+                                            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">FILTRO DE BUSQUEDA</p></strong>
+                                            <div class="row">
+                                                <div class="col-sm-6 text-center">
+                                                    <strong><label>Buscar por: </label></strong>
+                                                    <div class="row" style="margin-left: 30px;">
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="gender" id="rbMes" (click)="clickRbMes()" checked>
+                                                            <label class="form-check-label" for="gender_male">
+                                                                Busqueda por Mes
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="gender" id="rbFecha" (click)="clickRbFecha()">
+                                                            <label class="form-check-label" for="gender_female">
+                                                                Busqueda por Fecha
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6 text-center">
+                                                    <strong><label>Generar en Documento: </label></strong>
+                                                    <div class="row">
+                                                        <div class="col-sm-12 text-center">
+                                                            <img width="30px" src="assets/svg/ic_pdf.svg" alt="insertar SVG con la etiqueta image" (click)="reporteGenerar()">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="row">
+                                                <div class="col-sm-3 text-center">
+                                                    <strong><label>{{ rangoUno }}</label></strong>
+                                                    <select [(ngModel)]='mes' id="cbMes" class="form-control" (change)="changeMes()">
+                                                        <option value="1">Enero</option>
+                                                        <option value="2">Febrero</option>
+                                                        <option value="3">Marzo</option>
+                                                        <option value="4">Abril</option>
+                                                        <option value="5">Mayo</option>
+                                                        <option value="6">Junio</option>
+                                                        <option value="7">Julio</option>
+                                                        <option value="8">Agosto</option>
+                                                        <option value="9">Septiembre</option>
+                                                        <option value="10">Octubre</option>
+                                                        <option value="11">Noviembre</option>
+                                                        <option value="12">Diciembre</option>
+                                                    </select>
+                                                    <div class="form-group" id="divFechaInicio" style="display:none">
+                                                        <input type="date" [(ngModel)]="fecha_inicio" #ctrl="ngModel" class="form-control date" (change)="changeFechaFinal()">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3 text-center">
+                                                    <strong><label>{{ rangoDos }}</label></strong>
+                                                    <select [(ngModel)]='gestionActual' id="cbGestion" class="form-control" (change)="changeGestion()">
+                                                        <option *ngFor = "let data of datosGestion;" [value]="data.gestion">{{ data.gestion }}</option>
+                                                    </select>
+                                                    <div class="form-group" id="divFechaFinal" style="display:none">
+                                                        <input type="date" [(ngModel)]="fecha_final" #ctrl="ngModel" class="form-control date" (change)="changeFechaInicio()">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <br>
+                                            <br>
+
+                                            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">RESULTADO DE LA BUSQUEDA</p></strong>
+                                            <div class="table-responsive">
+                                                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped custom-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Nro.</th>
+                                                            <th>Fecha - Hora</th>
+                                                            <th>Detalle.</th>
+                                                            <th>Usuario de Registro</th>
+                                                            <th>Total Efectivo</th>
+                                                            <th>Saldo Sobreante</th>
+                                                            <th class="text-right">Opciones</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let datos of datosLiquidacion;let i = index;">
+                                                            <td>{{ i + 1 }}</td>
+                                                            <td>{{ datos.fecha }} - {{ datos.hora }}</td>
+                                                            <td>{{ datos.observacion }}</td>
+                                                            <td>
+                                                                <h2><a>{{ datos.usuario_adm }} <span>{{ datos.rol_usuario_adm }}</span></a></h2>
+                                                            </td>
+                                                            <td>Bs. {{ datos.total }}</td>
+                                                            <td>Bs. {{ datos.sobrante }}</td>
+                                                            <td class="text-right">
+                                                                <a href="javascript:void(0);" class="btn btn btn-success btn-rounded float-right" data-toggle="modal" data-target="#ModalListaProductoCarga"><i class="fa fa-eye"></i> </a> 
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <br>
+                                            <br>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="m-b-20">
+                                                        <h6>Total de Resultados</h6>
+                                                        <div class="table-responsive no-border">
+                                                            <table class="table mb-0">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th>Total Efectivo:</th>
+                                                                        <td class="text-right">Bs. {{ total }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Saldo Sobrante: </th>
+                                                                        <td class="text-right text-success">Bs. {{ sobrante }}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="solid-justified-tab20">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-3">
+                                            <h4 class="page-title">Cuenta 2</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="solid-justified-tab30">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-3">
+                                            <h4 class="page-title">Cuenta 3</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="solid-justified-tab40">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-3">
+                                            <h4 class="page-title">Cuenta 4</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="solid-justified-tab2">
+                    <div class="row">
+                        <div class="col-sm-4 col-3">
+                            <h4 class="page-title">Distribución realizadas</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table datatable class="table table-striped custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nº</th>
+                                            <th>Fecha</th>
+                                            <th>Nro. Cargas</th>
+                                            <th class="text-right">Opc.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p>No se encontro distribución</p>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="solid-justified-tab3">
+                    <div class="row">
+                        <div class="col-sm-4 col-3">
+                            <h4 class="page-title">Ventas realizadas</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table datatable class="table table-striped custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nº</th>
+                                            <th>Fecha</th>
+                                            <th>Nro. Pre Venta</th>
+                                            <th>Nro. Venta</th>
+                                            <th>Distribuidor</th>
+                                            <th class="text-right">Opc.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p>No se encontro distribución</p>
+                    </div>
+                    <p>No se encontro ventas</p>
+                </div>
+
+                <div class="tab-pane" id="solid-justified-tab4">
+                    <div class="row">
+                        <div class="col-sm-4 col-3">
+                            <h4 class="page-title">Ventas realizadas</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table datatable class="table table-striped custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nº</th>
+                                            <th>Fecha - Hora Apertura</th>
+                                            <th>Plataforma</th>
+                                            <th>Dispositivo</th>
+                                            <th>Fecha - Hora Cierre</th>
+                                            <th>Plataforma</th>
+                                            <th>Dispositivo</th>
+                                            <th>Observacion</th>
+                                            <th class="text-right">Opc.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p>No se encontro inicio de sesion</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>

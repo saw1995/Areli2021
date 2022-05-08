@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col-sm-4 col-3">
+        <h4 class="page-title">Lista de clientes.</h4>
+    </div>
+    <div class="col-sm-8 col-9 text-right m-b-20">
+        <a href="avascript:void(0);" (click)="clickNavegarHaciaAgregarCliente()" data-toggle="modal" data-target="#modalAgregarCategoria" class="btn btn btn-primary float-right"><i class="fa fa-plus"></i> Agregar nuevo Cliente</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="profile-widget">
+            <div class="table-responsive">
+                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table row-border hover">
+                  <thead>
+                    <tr>
+                        <th>Nº</th>
+                        <th>Foto</th>
+                        <th>Nombre detalle(s)</th>
+                        <th>Categoría</th>
+                        <th>Departamento</th>
+                        <th>Municipio</th>
+                        <th>Ruta</th>
+                        <th class="text-right">Opciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let cliente of listaCliente;let indice = index;">
+                        <td>{{ indice + 1}}</td>
+                        <td><div class='profile-body'><div class='image-area'><img width='56' src="{{ url }}imagenes/tiendas/{{cliente.foto}}"/></div></div></td>
+                        <td>{{ cliente.nombre_tienda }} - {{cliente.tipo}}</td>
+                        <td>{{ cliente.nombre_categoria }}</td>
+                        <td>{{ cliente.departamento }}</td>
+                        <td>{{ cliente.provincia }} - {{cliente.municipio}} </td>
+                        <td>{{ cliente.nombre_ruta }}</td>
+                        <td class="text-right">
+                            <a href="javascript:void(0);" class="btn btn btn-success btn-rounded float-right"><i class="fa fa-eye"></i> </a> 
+                            <a href="javascript:void(0);" (click)="clickNavegarActualizarCliente(cliente.id_tienda)" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-pencil"></i> </a>
+                        </td>
+    
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

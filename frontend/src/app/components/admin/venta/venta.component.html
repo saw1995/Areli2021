@@ -1,0 +1,596 @@
+<div *ngIf="showModalPresentacion">
+    <div class="modal fade" id="modalPresentacion" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">SELECCIONE LA CANTIDAD PARA AGREGAR AL CARRITO</h4>
+                </div>
+                <div class="card-box">
+                    <div class="row">
+                        
+                        <div class="col-sm-8">
+                            <div class="table-responsive">
+                                <table class="table table-striped custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Cant.</th>
+                                            <th>% Desc.</th>
+                                            <th>Descuento</th>
+                                            <th>Precio</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let descuento of listaDescuento;let i = index;">
+                                            <td>{{ descuento.cantidad_inicio }} uds. - {{ descuento.cantidad_limite }} uds. </td>
+                                            <td>{{ descuento.porcentaje_descuento }} %</td>
+                                            <td>Bs. {{ descuento.descuento }}</td>
+                                            <td>Bs. {{ descuento.precio_descuento }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <strong><label>Cantidad</label></strong>
+                                    <input type="number" [(ngModel)]="cantidad" #ctrl="ngModel" class="form-control" placeholder="Ingrese la cantidad" (change)="calcularCantidadDescuento()">
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <strong><label>Presentacion</label></strong>
+                                    <select [(ngModel)]='medida' id="cbPresentacion" class="form-control" (change)="calcularCantidadDescuento()">
+                                        <option value="0" disabled selected>Seleccione una Presentacion</option>
+                                        <option *ngFor = "let presentacion of listaPresentacion;" [value]="presentacion.unidad">{{ presentacion.medida }} ({{presentacion.unidad}} Uds.)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <ul class="list-unstyled invoice-payment-details">
+                                    <li>
+                                        <h5>Precio Actual: <span class="text-center">Bs. {{ precio_actual }}</span></h5>
+                                        <h5>SubTotal: <span class="text-center"><strong><h4>Bs. {{subtotal_actual}}</h4></strong></span></h5>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="background-color: rgb(50, 141, 194);">
+                    <button type="button" class="btn btn-success" (click)="agregarCarrito()">AGREGAR A CARRITO</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModal>CANCELAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showModalDetallePromocion">
+    <div class="modal fade" id="modalDetallePromocion" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">DETALLES DE LA PROMOCIÓN</h4>
+                </div>
+                <div class="card-box">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label><strong>DETALLE PROMOCIÓN:  </strong>{{ nombre_promocion_seleccionado }}</label>  
+                            <br><label><strong>PRECIO:  </strong>Bs./  {{ precion_promocion_seleccionado }}</label>
+                            <div class="table-responsive">
+                                <table class="table table-striped custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Detalle</th>
+                                            <th>cantidad</th>
+                                            <th>Precio</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let producto of listaPromocionDetalle;let i = index;">
+                                            <td># {{ producto.codigo }}</td>
+                                            <td>
+                                                <img width="40" height="40" src="{{url}}imagenes/productos/{{producto.imagen_uno}}" class="rounded-circle m-r-5" alt="">
+                                                {{ producto.nombre }} - {{ producto.descripcion }}
+                                            </td>
+                                            <td>{{ producto.cantidad }}</td>
+                                            <td>Bs. {{ producto.precio }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>    
+                        
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <strong><label>Cantidad promoción: </label></strong>
+                                <input type="number" [(ngModel)]="cantidad_promocion" #ctrl="ngModel" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="background-color: rgb(50, 141, 194);">
+                    <button type="button" class="btn btn-success" (click)="agregarPromocionAlCarrito()">AGREGAR PROMOCIÓN AL CARRITO</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModal>CERRAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showModalCarrito">
+    <div class="modal fade" id="modalCarrito" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">CARRITO DE VENTA</h4>
+                </div>
+                <div class="card-box">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="table-responsive">
+                                <table class="table table-striped custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Cant.</th>
+                                            <th>Descripcion</th>
+                                            <th>Precio Unitario</th>
+                                            <th>Descuento</th>
+                                            <th>Precio Descuento</th>
+                                            <th>SubTotal</th>
+                                            <th class="text-right">Eliminar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let carrito of listaCarrito;let i = index;">
+                                            <td>{{ carrito.cant_medida }} ({{ carrito.medida }})</td>
+                                            <td><span class=" " [ngClass]="{'custom-badge status-green': carrito.id_promocion!='1' }">{{ carrito.nombre_promocion }}</span> #{{ carrito.codigo }} {{ carrito.nombre }}</td>
+                                            <td>Bs. {{ carrito.precio_medida }}</td>
+                                            <td>Bs. {{ carrito.descuento }} ({{ carrito.porcentaje_descuento }}%)</td>
+                                            <td>Bs. {{ carrito.precio_descuento_medida }}</td>
+                                            <td>Bs. {{ carrito.subTotalDescuento }}</td>
+                                            <td class="text-right">
+                                                <a href="javascript:void(0);" class="btn btn-danger btn-rounded float-right" (click)="eliminarProductoCarritoById(carrito.id)"><i class="fa fa-remove"></i></a> 
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                       
+                    </div>
+                </div>
+                <div class="modal-footer" style="background-color: rgb(50, 141, 194);">
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalVentaDirecta" (click)="click_ventaDirecta('venta')">VENTA DIRECTA</button>
+                    <button type="button" class="btn btn-info" (click)="click_agregarVenta('pre_venta')">PRE VENTA</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModalCarrito>CERRAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div *ngIf="showModalVentaDirecta">
+    <div class="modal fade" id="modalVentaDirecta" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">SELECCIONE EL METODO DE PAGO</h4>
+                </div>
+                <div class="card-box">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <strong><label>Credito</label></strong>
+                            <ul class="list-group notification-list">
+                                <li class="list-group-item">
+                                    ¿ Venta al Credito ?
+                                    <div class="material-switch float-right">
+                                        <input id="venta_credito_module" type="checkbox" [(ngModel)]="venta_credito" [checked]="venta_credito" (change)="change_ventaCredito()">
+                                        <label for="venta_credito_module" class="badge-primary"></label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6" id="metodoPago">
+                            <div class="form-group">
+                                <strong><label>Metodo de Pago</label></strong>
+                                <select [(ngModel)]='metodo_pago' id="cbMetodoPago" class="form-control" (change)="change_metodoPago()">
+                                    <option value="" disabled selected>Seleccione un Metodo</option>
+                                    <option value="0">Efectivo</option>
+                                    <option value="1">Tarjeta de Debito</option>
+                                    <option value="2">Transferencia Bancaria</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="pagoCredito" style="margin-left: 5px; margin-right: 5px; margin-top: 10px; display: none;">
+
+                        <div class="row">
+                            <div class="col-sm-6 col-6">
+                                <h4 class="page-title">Lista de Pago del Credito</h4>
+                            </div>
+                            <div class="col-sm-6 col-6 text-right m-b-30">
+                                <a href="javascript:void(0);" class="btn btn-primary float-right" data-toggle="modal" data-target="#modalCreditoVenta"
+                                 (click)="click_AbrirAgregarCuotaPago()"><i class="fa fa-plus"></i> Agregar Pago</a>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="table-responsive">
+                                <table class="table table-striped custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nro.</th>
+                                            <th>Fecha Estimada</th>
+                                            <th>Total Pago</th>
+                                            <th>Eliminar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let credito of listaCreditoPagos;let i = index;">
+                                            <td class="text-right">{{ i+1 }}</td>
+                                            <td class="text-center">{{credito.fecha | date: 'mediumDate'}}</td>
+                                            <td class="text-right">{{credito.monto | number:'2.2-2'}}</td>
+                                            <td>
+                                                <div class="body text-right">
+                                                    <button type="button" class="btn btn-danger" (click)="quitarCuotaDeListaCredito(credito.codigo)">Eliminar</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="background-color: rgb(50, 141, 194);">
+                    <button type="button" class="btn btn-success" (click)="agregarVenta()">REALIZAR VENTA</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModalVentaDirecta>CANCELAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showModalCreditoVenta">
+    <div class="modal fade" id="modalCreditoVenta" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">AGREGAR PAGO CUOTAS CRÉDITO</h4>
+                </div>
+                <div class="card-box">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                <strong>Nota: </strong> Tome en cuenta que <a class="alert-link">todos los campos con <span class="text-danger">*</span></a> son obligatorios.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label><strong>Monto a pagar: </strong><span class="text-danger">*</span></label>
+                                <input type="number" [(ngModel)]="monto_credito" #ctrl="ngModel" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label><strong>Fecha pago: </strong> <span class="text-danger">*</span></label>
+                                <input type="date" [(ngModel)]="fecha_credito" #ctrl="ngModel" class="form-control date">
+                            </div>
+                        </div>   
+
+                    </div>
+                </div>
+                <div class="modal-footer" style="background-color: rgb(50, 141, 194);">
+                    <button type="button" class="btn btn-success" (click)="click_AgregarCuotaAlista()">AGREGAR CUOTA</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModal>CERRAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showModalTienda">
+    <div class="modal fade" id="modalTienda" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">LISTA DE CLIENTES</h4>
+                </div>
+                <div class="card-box">
+                    <div class="row">
+                        <div class="col-sm-12" style="margin-bottom: 20px;">
+                            <div class="row" style="margin-left: 30px;">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="rbMes" (click)="click_rbRuta()">
+                                    <label class="form-check-label" for="gender_male">
+                                        en rutas
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="rbFecha" (click)="click_rbEmpresa()">
+                                    <label class="form-check-label" for="gender_female">
+                                        en la empresa
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="rbAvanzada" (click)="click_rbAvanzada()">
+                                    <label class="form-check-label" for="gender_avanzada">
+                                        avanzada
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="table-responsive">
+                                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Categoria</th>
+                                            <th>Ruta</th>
+                                            <th>Dirección</th>
+                                            <th>Fotografia</th>
+                                            <th>Cliente</th>
+                                            <th class="text-right">Seleccionar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let tienda of listaTienda;let i = index;">
+                                            <td>{{ tienda.nombre_categoria }}</td>
+                                            <td>{{ tienda.nombre_ruta }}</td>
+                                            <td>{{ tienda.municipio }}, zona {{ tienda.zona }}, av. {{ tienda.avenida }}, av. {{ tienda.calle }}, av. {{ tienda.numero }}</td>
+                                            <td>
+                                                <img class="center_image" width="60px" alt="" src="{{ url }}imagenes/tiendas/{{tienda.foto}}">
+                                            </td>
+                                            <td>{{ tienda.nombre_tienda }}</td>
+                                            <td class="text-right">
+                                                <a href="javascript:void(0);" class="btn btn-info btn-rounded float-right" (click)="click_seleccionarTienda(tienda.id_tienda, tienda.foto, tienda.nombre_tienda, tienda.nombre_categoria)"><i class="fa fa-eye"></i></a> 
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                       
+                    </div>
+                </div>
+                <div class="modal-footer" style="background-color: rgb(50, 141, 194);">
+					<button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModalTienda>CERRAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <h4 class="page-title">Venta</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-9">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card-box">
+                    <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">PROMOCIONES ACTUALES</p></strong>
+
+                    <div class="row" style="display: flex; overflow-x: auto;">
+                        <div class="col-md-2 col-sm-2 col-lg-3" style="margin: 0; padding: 0;" *ngFor="let promocion of listaPromociones">
+                            <div class="blog grid-blog"  style="margin: 0; padding: 7px;">
+                                <div id="id{{promocion.id_promocion}}" class="carousel slide" data-ride="carousel">
+                                    <ol class="carousel-indicators">
+                                        <li *ngFor="let imagen of promocion.imagen; let i = index" data-target="#idproducto.id_promocion" data-slide-to="i" [ngClass]="{'active': i == 0}"></li>
+                                    </ol>
+                                    <div class="carousel-inner">
+                                      <div *ngFor="let imagen of promocion.imagen; let i = index"  class="carousel-item" [ngClass]="{'active': i == 0}">
+                                        <img class="d-block w-100" src="{{url}}imagenes/promociones/{{imagen}}" alt="First slide">
+                                      </div>
+                                    </div>
+                                    <a class="carousel-control-prev" href="#id{{promocion.id_promocion}}" role="button" data-slide="prev">
+                                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                      <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#id{{promocion.id_promocion}}" role="button" data-slide="next">
+                                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                      <span class="sr-only">Next</span>
+                                    </a>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <ul class="list-unstyled text-center" >
+                                            <li><a href="javascript:void(0);" data-toggle="modal" data-target="#modalDetallePromocion" 
+                                                (click)="click_AbrirDetallePromocion(promocion.id_promocion, promocion.nombre, promocion.descripcion, promocion.precio)"><h5 style="margin: 0; padding: 0; font-size: 85%;"><strong>{{promocion.nombre}}</strong></h5></a></li>
+                                            <li><span style="margin: 0; padding: 0; font-size: 85%;">{{promocion.descripcion}}</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                   
+                </div>
+            </div>
+        </div>
+
+        <div class="card-box">
+            <strong> <p class="doctor-name text-ellipsis" style="color:rgb(26, 157, 161); margin-bottom: 3px;">CATEGORIA DE PRODUCTOS</p></strong>
+            <div class="row">
+                <ul class="personal-info" style="display: flex; overflow-x: auto;">
+                    <li style="margin: 10px; padding: 0px;" *ngFor="let categoria of listaCategoria">
+                        <a href="javascript:void(0);" (click)="listaGrupoProductoEmpresaStockByCategoriaAlmacenEmpresa(categoria.id)">
+                            <div class="blog grid-blog my-category" style="background-image: url('{{ url }}imagenes/categorias/{{categoria.imagen}}'); ">
+                                <div class="background-category">
+                                    <h5 class="doctor-name text-center name-category">{{ categoria.nombre }}</h5>
+                                    <p class="doctor-name text-center description-category">{{ categoria.descripcion }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-5">
+                <div class="card-box">
+                    <strong><p class="doctor-name text-ellipsis" style="color:rgb(26, 157, 161); margin-bottom: 3px;">FAMILIA DE PRODUCTOS</p></strong>
+                    <div class="row">
+                        <div class="col-sm-6" style="padding: 0;" *ngFor="let familia of listaFamiliaProductos">
+                            <ul class="personal-info">
+                                <li style="margin: 10px; padding: 0px;">
+                                    <a href="javascript:void(0);" (click)="listaProductoEmpresaStockByAlmacenGrupoProductoEmpresa(familia.id)">
+                                        <div class="blog grid-blog my-category" style="background-image: url('{{ url }}imagenes/productos/{{familia.imagen}}'); ">
+                                            <div class="background-category my-category-bottom">
+                                                <h5 class="doctor-name text-center name-category">{{ familia.grupo }}</h5>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <p class="doctor-name" style="padding: 0; font-size: 85%; ">{{ familia.descripcion }}</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-7">
+                <div class="card-box">
+                    <strong><p class="doctor-name text-ellipsis" style="color:rgb(26, 157, 161); margin-bottom: 3px;">PRODUCTOS</p></strong>
+                    <div class="blog" style="margin: 0px; padding-top: 0px; padding-bottom: 0px; padding-left: 20px;" *ngFor="let producto of listaProductos">
+                        <div class="row">
+                            <div class="col-sm-4" style="margin: 0; padding: 0px;">
+                                <div id="id{{producto.id_producto}}" class="carousel slide" data-ride="carousel">
+                                    <ol class="carousel-indicators">
+                                        <li *ngFor="let imagen of producto.imagen; let i = index" data-target="#idproducto.id_producto" data-slide-to="i" [ngClass]="{'active': i == 0}"></li>
+                                    </ol>
+                                    <div class="carousel-inner">
+                                      <div *ngFor="let imagen of producto.imagen; let i = index" class="carousel-item" [ngClass]="{'active': i == 0}">
+                                        <div class="mycontainer" style="background-image: url('{{url}}imagenes/productos/{{imagen}}');">
+                                            <div class="myblur">
+                                                <img class="myimg" src="{{url}}imagenes/productos/{{imagen}}" alt="First slide">
+                                            </div>
+                                        </div>	
+                                      </div>
+                                    </div>
+                                    <a class="carousel-control-prev" href="#id{{producto.id_producto}}" role="button" data-slide="prev">
+                                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                      <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#id{{producto.id_producto}}" role="button" data-slide="next">
+                                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                      <span class="sr-only">Next</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-sm-8" style="margin: 0; padding: 0;">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <ul class="list-unstyled text-center" >
+                                            <li><span style="margin: 0; padding: 0; font-size: 85%;">Codigo: #{{producto.codigo}}</span></li>
+                                            <li><h5 style="margin: 0; padding: 0; font-size: 85%;"><strong>{{producto.nombre}}</strong></h5></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <ul class="list-unstyled text-center">
+                                            <li><h5 class="mb-0" style="margin: 0; padding: 0; font-size: 83%;"><strong>Fec. Vencimiento</strong></h5></li>
+                                            <li><span style="margin: 0; padding: 0; font-size: 88%;">{{producto.fecha_vencimiento}}</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <ul class="list-unstyled text-center">
+                                            <li><h5 class="mb-0" style="margin: 0; padding: 0; font-size: 83%;"><strong>Stock</strong></h5></li>
+                                            <li><span style="margin: 0; padding: 0; font-size: 88%;">{{producto.cant_medida}}</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <ul class="list-unstyled text-center">
+                                            <li><h5 class="mb-0" style="margin: 0; padding: 0; font-size: 83%;"><strong>Cant. Minima</strong></h5></li>
+                                            <li><span style="margin: 0; padding: 0; font-size: 88%;">{{producto.cantidad_minima}} Ud(s)</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="post-left">
+                                            <ul>
+                                                <li><a href="javascript:void(0);" data-toggle="modal" data-target="#modalPresentacion" (click)="click_presentacion(producto.id_producto, producto.stock, producto.cantidad_minima)" class="read-more" style="font-size: 93%;"><i class="fa fa-long-arrow-right"></i> Vender</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="card-box" style="padding-left: 0; padding-right: 0;">
+            <div class="col-sm-12">
+                <h4 class="page-title text-center"><strong>DATOS DE VENTA</strong></h4>
+            </div>
+            <div class="col-sm-12 text-center">
+                <div class="doctor-img">
+                    <a class="avatar" href="javascript:void(0);"><img alt="" src="{{url}}imagenes/tiendas/{{imagen_tienda}}" data-toggle="modal" data-target="#modalTienda" (click)="click_abrirTienda()"></a>
+                </div>
+                <h4 class="doctor-name text-ellipsis"><a href="javascript:void(0);" data-toggle="modal" data-target="#modalTienda" (click)="click_verCarrito()" (click)="click_abrirTienda()">{{tienda}}</a></h4>
+                <div class="doc-prof">{{categoria_tienda}}</div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <strong><label>NIT / CI del Cliente </label></strong>
+                    <input type="number" [(ngModel)]="nit" #ctrl="ngModel" class="form-control" placeholder="NIT / CI">
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <strong><label>Razón Social del Cliente </label></strong>
+                    <input type="text" [(ngModel)]="razon_social" #ctrl="ngModel" class="form-control" placeholder="Razon Social">
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <li class="list-group-item">
+                    <strong><label>Factura</label></strong>
+                    <div class="material-switch float-right">
+                        <input id="factura_module" type="checkbox" [(ngModel)]="enviar_factura" [checked]="enviar_factura">
+                        <label for="factura_module" class="badge-primary"></label>
+                    </div>
+                </li>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <strong><label>Fecha de Entrega (Pre Venta)</label></strong>
+                    <input type="date" [(ngModel)]="fecha_entrega" #ctrl="ngModel" class="form-control date">
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <strong><label>Observacion </label></strong>
+                    <input type="text" [(ngModel)]="observacion" #ctrl="ngModel" class="form-control" placeholder="Observacion">
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <ul class="list-unstyled invoice-payment-details">
+                    <li>
+                        <h5>SubTotal: <span class="text-center">Bs. {{ subtotal }}</span></h5>
+                        <h5>Descuento: <span class="text-center"><strong>Bs. {{descuento}}</strong></span></h5>
+                        <h5>Importe Total: <span class="text-center"><strong><h4>Bs. {{total}}</h4></strong></span></h5>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-12 text-center">
+                <a href="javascript:void(0);" class="btn btn-success" style="margin-right: 5px;" data-toggle="modal" data-target="#modalCarrito" (click)="click_verCarrito()" ><i class="fa fa-eye"></i> Ver Carrito</a> 
+            </div>
+            <br>
+        </div>
+    </div>
+</div>

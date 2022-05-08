@@ -1,0 +1,227 @@
+<!--modales para mostrar-->
+<div *ngIf="showModalAgregarGrupoProducto">
+    <div class="modal fade" id="modalAgregarGrupoProducto" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">REGISTRAR FAMILIA DE PRODUCTOS</h4>
+                </div>
+                <div class="card-box">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                <strong>Nota: </strong> Tome en cuenta que <a class="alert-link">todos los campos con <span class="text-danger">*</span></a> son obligatorios.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label><strong>Descripción Marca: </strong><span class="text-danger">*</span></label>
+                                <input readonly type="text" [(ngModel)]="marca_producto" #ctrl="ngModel" class="form-control" placeholder="Ingrese descripción de la Marca">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label><strong>Categoría producto: </strong><span class="text-danger">*</span></label>
+                                <select [(ngModel)]="id_categoria" #ctrl="ngModel" class="form-control show-tick">
+                                    <option value="" disabled selected>Seleccione una Categoría</option>
+                                    <option *ngFor = "let categoria of listaCategoria" [value]="categoria.id">{{categoria.nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label><strong>Nombre de la Familia: </strong><span class="text-danger">*</span></label>
+                                <input type="text" [(ngModel)]="nombre_familia" #ctrl="ngModel" class="form-control" placeholder="Ingrese nombre de la familia">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label><strong>Descripción de la Familia: </strong><span class="text-danger">*</span></label>
+                                <input type="text" [(ngModel)]="descripcion_familia" #ctrl="ngModel" class="form-control" placeholder="Ingrese descripción de la familia">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="custom-dropzone" ngx-dropzone [multiple]="false" [accept]="'image/*'" (change)="onSelect($event)">
+                                <ngx-dropzone-label>
+                                    <div>
+                                        <h2>AGREGAR FOTOGRAFIA</h2>
+                                    </div>
+                                </ngx-dropzone-label>
+                                <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+                                    <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                                </ngx-dropzone-image-preview>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" (click)="agregarProductoGrupo()">REGISTRAR GRUPO PRODUCTO</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModal>CERRAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--modales para mostrar-->
+<div *ngIf="showModalActualizarFamiliaProductos">
+    <div class="modal fade" id="ModalActualizarFamiliaProductos" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(50, 141, 194);">
+                    <h4 class="modal-title" id="largeModalLabel" style="color: #fff;">ACTUALIZAR FAMILIA DE PRODUCTOS</h4>
+                </div>
+                <div class="card-box">
+                    <div class="row">
+
+                        <div class="col-sm-12">
+                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                <strong>Nota: </strong> Tome en cuenta que <a class="alert-link">todos los campos con <span class="text-danger">*</span></a> son obligatorios.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label><strong>Descripción Marca: </strong><span class="text-danger">*</span></label>
+                                <input readonly type="text" [(ngModel)]="marca_producto" #ctrl="ngModel" class="form-control" placeholder="Ingrese descripción de la Marca">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+
+                            <div class="form-group">
+                                <label><strong>Categoría producto: </strong><span class="text-danger">*</span></label>
+                                <select [(ngModel)]="id_categoria" #ctrl="ngModel" class="form-control show-tick">
+                                    <option value="" disabled selected>Seleccione una Categoría</option>
+                                    <option *ngFor = "let categoria of listaCategoria" [value]="categoria.id">{{categoria.nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label><strong>Nombre de la Familia: </strong><span class="text-danger">*</span></label>
+                                <input type="text" [(ngModel)]="nombre_familia" #ctrl="ngModel" class="form-control" placeholder="Ingrese nombre de la familia">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label><strong>Descripción de la Familia: </strong><span class="text-danger">*</span></label>
+                                <input type="text" [(ngModel)]="descripcion_familia" #ctrl="ngModel" class="form-control" placeholder="Ingrese descripción de la familia">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <strong><label>Imagen Actual</label></strong>
+                                <div class="blog-image">
+                                    <img class="img-fluid" src="{{url}}imagenes/productos/{{imagen_familia}}" alt="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="custom-dropzone" ngx-dropzone [multiple]="false" [accept]="'image/*'" (change)="onSelect($event)">
+                                <ngx-dropzone-label>
+                                    <div>
+                                        <h2>AGREGAR FOTOGRAFIA</h2>
+                                    </div>
+                                </ngx-dropzone-label>
+                                <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+                                    <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                                </ngx-dropzone-image-preview>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" (click)="actualizarProductoGrupoById()">ACTUALIZAR GRUPO PRODUCTO</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" #cerrarModal>CERRAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Inciamos el componente principal-->
+
+<div class="card-box">
+    <div class="row">
+        <div class="col-sm-4 col-3">
+            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">FAMILIA DE PRODUCTOS DE LA MARCA</p></strong>
+        </div>
+    
+        <div class="col-sm-8 col-9 text-right m-b-20">
+            <a href="javascript:void(0);" class="btn btn-primary float-right" data-toggle="modal" data-target="#modalAgregarGrupoProducto" (click)="clickAgregarNuevoGrupoProducto()"><i class="fa fa-plus"></i> Agregar nueva familia</a>
+        </div>
+    </div>
+    
+    <div class="row">
+    
+        <div class="col-sm-3 col-3">
+            <div class="doctor-img">
+                <a class="avatar" ><img src="{{url}}imagenes/marcas/{{imagen_marca}}"></a>
+            </div>
+        </div>
+    
+        <div class=" col-sm-9 col-3">
+    
+            <h5 class="doctor-name">{{nombre_marca}}</h5>
+            <i class="fa fa-circle"></i> {{descripcion_marca}}
+        </div>
+    </div>
+</div>
+
+
+<div class="card-box">
+
+    <div class="row">
+    
+        <div class="col-md-3 col-sm-3 col-lg-3" style="margin: 0; padding: 0;" *ngFor="let familia of listaFamiliaProductos">
+            <div class="blog grid-blog"  style="margin: 0; padding: 7px;">
+                <div class="blog-image">
+                    <a href="javascript:void(0);" (click)="clickNavegarHaciaProductos(familia.id)"><img class="img-fluid" src="{{url}}imagenes/productos/{{familia.imagen}}" alt=""></a>
+                </div>
+    
+                <div class="dropdown profile-action">
+                    <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="javascript:void(0);" (click)="clickNavegarHaciaProductos(familia.id)"><i class="fa fa-eye m-r-5"></i> Ver familia productos</a>
+                        <a class="dropdown-item" href="javascript:void(0);" data-toggle="modal" data-target="#ModalActualizarFamiliaProductos" (click)="clickActualizarDatosFamilia(familia.id, familia.grupo, familia.descripcion, familia.id_categoria, familia.imagen)"><i class="fa fa-pencil m-r-5"></i> Actualizar datos</a>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="list-unstyled text-center" >
+                            <li><a href="javascript:void(0);" (click)="clickNavegarHaciaProductos(familia.id)"><h5 style="margin: 0; padding: 0; font-size: 85%;"><strong>{{familia.grupo}}</strong></h5></a></li>
+                            <li><span style="margin: 0; padding: 0; font-size: 85%;">{{familia.descripcion}}</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    </div>
+
+</div>

@@ -1,0 +1,153 @@
+<div class="row">
+    <div class="col-sm-12 col-12">
+        <h4 class="page-title">Lista de Traspasos</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-box">
+            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">FILTRO DE BUSQUEDA</p></strong>
+            <div class="row">
+                <div class="col-sm-6 text-center">
+                    <strong><label>Buscar por: </label></strong>
+                    <div class="row" style="margin-left: 30px;">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" id="rbMes" (click)="clickRbMes()" checked>
+                            <label class="form-check-label" for="gender_male">
+                                Busqueda por Mes
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" id="rbFecha" (click)="clickRbFecha()">
+                            <label class="form-check-label" for="gender_female">
+                                Busqueda por Fecha
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 text-center">
+                    <strong><label>Generar en Documento: </label></strong>
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <img width="30px" src="assets/svg/ic_pdf.svg" alt="insertar SVG con la etiqueta image" (click)="reporteListaTraspasoByFechaAlmacenesEstado()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-4 text-center">
+                    <strong><label>{{ rangoUno }}</label></strong>
+                    <select [(ngModel)]='mes' id="cbMes" class="form-control" (change)="changeMes()">
+                        <option value="1">Enero</option>
+                        <option value="2">Febrero</option>
+                        <option value="3">Marzo</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Mayo</option>
+                        <option value="6">Junio</option>
+                        <option value="7">Julio</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+                    <div class="form-group" id="divFechaInicio" style="display:none">
+                        <input type="date" [(ngModel)]="fecha_inicio" #ctrl="ngModel" class="form-control date" (change)="changeFechaFinal()">
+                    </div>
+                </div>
+                <div class="col-sm-4 text-center">
+                    <strong><label>{{ rangoDos }}</label></strong>
+                    <select [(ngModel)]='gestionActual' id="cbGestion" class="form-control" (change)="changeGestion()">
+                        <option *ngFor = "let data of datosGestion;" [value]="data.gestion">{{ data.gestion }}</option>
+                    </select>
+                    <div class="form-group" id="divFechaFinal" style="display:none">
+                        <input type="date" [(ngModel)]="fecha_final" #ctrl="ngModel" class="form-control date" (change)="changeFechaInicio()">
+                    </div>
+                </div>
+                <div class="col-sm-4 text-center">
+                    <strong><label>Usuario</label></strong>
+                    <select [(ngModel)]='id_usuario' id="cbUsuario" class="form-control" (change)="changeUsuario()">
+                        <option [value]="0" selected> Todos </option>
+                        <option *ngFor = "let data of datosUsuario;" [value]="data.id">{{ data.nombre_rol }} - {{ data.nombre }} {{ data.appat }} {{ data.apmat }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4 text-center">
+                    <strong><label>{{ tipoSucursal }}</label></strong>
+                    <select [(ngModel)]='id_sucursal_select' id="cbSucursal" class="form-control" (change)="changeSucursal()">
+                        <option [value]="0" selected> Todos </option>
+                        <option [value]="1"> Sin Sucursal </option>
+                        <option *ngFor = "let data of datosSucursal;" [value]="data.id">Sucursal - {{ data.nombre }}</option>
+                    </select>
+                </div>
+                <div class="col-sm-4 text-center">
+                    <strong><label>{{ tipoAlmacen }}</label></strong>
+                    <select [(ngModel)]='id_almacen_select' id="cbAlmacen" class="form-control" (change)="changeAlmacen()">
+                        <option [value]="0" selected> Todos </option>
+                        <option *ngFor = "let data of datosAlmacen;" [value]="data.id">{{ data.nombre }}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-box">
+            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">RESULTADO DE LA BUSQUEDA</p></strong>
+            <div class="table-responsive">
+                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped custom-table">
+                    <thead>
+                        <tr>
+                            <th>Nro.</th>
+                              <th>Fecha - Hora</th>
+                              <th>Categoria</th>
+                              <th>imagen</th>
+                              <th>Producto</th>
+                              <th>Cantidad</th>
+                              <th>Usuario</th>
+                              <th>Sucursal</th>
+                              <th>Almacen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let datos of datosTraspaso">
+                            <td>{{ datos.nro_traspaso }}</td>
+                            <td>{{ datos.fecha }} - {{ datos.hora }}</td>
+                            <td>{{ datos.nombre_categoria }}</td>
+                            <td>
+                                <div id="id{{datos.id}}" class="carousel slide" data-ride="carousel">
+                                    <ol class="carousel-indicators">
+                                        <li *ngFor="let imagen of datos.imagen; let i = index" data-target="#iddatos.id" data-slide-to="i" [ngClass]="{'active': i == 0}"></li>
+                                    </ol>
+                                    <div class="carousel-inner">
+                                      <div *ngFor="let imagen of datos.imagen; let i = index"  class="carousel-item" [ngClass]="{'active': i == 0}">
+                                        <img class="d-block w-100" src="{{url}}imagenes/productos/{{imagen}}" alt="First slide">
+                                      </div>
+                                    </div>
+                                    <a class="carousel-control-prev" href="#id{{datos.id}}" role="button" data-slide="prev">
+                                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                      <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#id{{datos.id}}" role="button" data-slide="next">
+                                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                      <span class="sr-only">Next</span>
+                                    </a>
+                                  </div>
+                            </td>
+                            <td>#{{ datos.codigo }} {{ datos.nombre }}</td>
+                            <td>{{ datos.cant_medida }}</td>
+                            <td>{{ datos.usuario }}</td>
+                            <td>{{ datos.sucursal }}</td>
+                            <td>{{ datos.almacen }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

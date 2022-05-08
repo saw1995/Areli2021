@@ -1,0 +1,58 @@
+<div class="row">
+    <div class="col-sm-12 col-12">
+        <h4 class="page-title">Agregar Nuevo Ruta</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <strong>Nota: </strong> Tome en cuenta que <a class="alert-link">todos los campos con <span class="text-danger">*</span></a> son obligatorios.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+    
+    <div class="col-sm-12">
+        <div class="card-box">
+            <div class="row">  
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <strong><label>Nombre <span class="text-danger">*</span></label></strong>
+                        <input type="text" [(ngModel)]="nombre" #ctrl="ngModel" class="form-control" placeholder="Ingrese el Nombre de la Ruta">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <strong><label>Descripcion <span class="text-danger">*</span></label></strong>
+                        <input type="text" [(ngModel)]="descripcion" #ctrl="ngModel" class="form-control" placeholder="Ingrese la Descripcion">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="card-box">
+            <div class="row">  
+                <div class="col-sm-1">
+                    <div class="form-group">
+                        <a style="margin-bottom: 5px;" href="javascript:void(0);" (click)="click_agregarPunto()" class="btn btn btn-success btn-rounded float-right"><i class="fa fa-plus"></i> </a>
+                        <a style="margin-bottom: 5px;" href="javascript:void(0);" (click)="click_eliminarPunto()" class="btn btn btn-danger btn-rounded float-right"><i class="fa fa-minus"></i> </a> 
+                    </div>
+                </div>
+                <div class="col-sm-11">
+                    <div class="form-group">
+                        <label>Ubicacion Geografica - <strong>Limitar Area</strong></label>
+                        <div class="map" #mapElement></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="m-t-20 text-center">
+    <button class="btn btn-success submit-btn" (click)="agregarRuta()" style="margin-right: 5px;">REGISTRAR RUTA</button>
+</div>

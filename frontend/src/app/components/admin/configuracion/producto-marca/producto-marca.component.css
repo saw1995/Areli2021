@@ -1,0 +1,17 @@
+.center {
+    display: flex;
+    justify-content: center;
+  }
+
+  .centrar_content
+  {
+    display: flex;
+  justify-content: center;
+  }
+
+  .centrar_imagen{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: bottom;
+  }

@@ -1,0 +1,45 @@
+<div class="row">
+    <div class="col-sm-12 col-12">
+        <h4 class="page-title">Lista de Productos de la Categoria</h4>
+    </div>
+</div>
+
+<div class="row">
+    <aside class="col-md-2">
+        <div class="profile-widget">
+            <strong> <p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">CATEGORIA</p></strong>
+            <div class="doctor-img">
+                <a class="avatar" href="javascript:void(0);"><img class="center_image " alt="" src="{{imagen_categoria}}"></a>
+            </div>
+            
+            <h5 class="doctor-name text-ellipsis">{{nombre_categoria}}</h5>
+            <i class="fa fa-circle"></i> {{descripcion_categoria}}
+        </div>
+ 
+    </aside>
+
+    <div class="col-md-10">
+        <div class="card-box">
+            <strong><p class="doctor-name text-ellipsis" style="color:rgb(5, 7, 153); margin-bottom: 3px;">PRODUCTOS QUE PERTENECEN A LA CATEGORIA</p></strong>
+            <div class="row">
+                <div class="col-md-4 col-sm-4  col-lg-3" *ngFor="let producto of listaProductoByCategoria">
+                    <div class="blog grid-blog">
+                        <div class="blog-image">
+                            <a><img class="img-fluid" src="{{url}}imagenes/productos/{{producto.imagen}}" alt=""></a>
+                        </div>
+                        <div class="blog-content">
+                            <h3 class="blog-title"><a href="javascript:void(0);">{{producto.grupo}}</a></h3>                   
+                            <div class="blog-info clearfix">
+                                <div class="post-left">
+                                    <ul>
+                                        <li><a><i class="fa"></i> <span>{{producto.descripcion}}</span></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
